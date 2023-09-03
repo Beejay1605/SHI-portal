@@ -1,0 +1,32 @@
+.payin-code-page {
+  width: 100%;
+  height: auto;
+}
+.payin-code-page .action-row {
+  padding-bottom: 16px;
+  width: 100%;
+  display: flex;
+}
+.payin-code-page .action-row button, .payin-code-page .action-row a {
+  height: 44px;
+  display: flex;
+  margin-left: auto;
+}
+.payin-code-page .action-row button span, .payin-code-page .action-row a span {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.payin-code-page table {
+  width: 100%;
+}
+.payin-code-page table tr td a {
+  display: flex;
+  text-decoration: none;
+  margin-right: 12px;
+}
+.payin-code-page table tr td a span {
+  margin-right: 4px;
+}
+.payin-code-page table tr td:last-child {
+  display: flex;
+}/*# sourceMappingURL=Index.css.map */

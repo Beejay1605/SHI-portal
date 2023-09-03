@@ -1,0 +1,566 @@
+﻿@using Domain.Models.Components;
+@model Domain.DTO.Operations.Products.Output.CreatePageOutputDto;
+@{
+    ViewData["Title"] = "Create Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string form_group_name = "registration-group";
+}
+
+<link href="~/styles/operations/Products/Create.css" rel="stylesheet" type="text/css" /> 
+
+
+<div class="product-creation-page">
+    <div class="cover-photo">
+        <img src="~/assets/design/Default_Image_Thumbnail.png" id="img-cover-photo" alt="">
+        <div class="img-filter">
+            <button class="btn btn-outline-dark" id="btn-cover-browse">Browse</button>
+        </div>
+        <input type="file" id="input-file-cover-img" hidden accept="image/png, image/gif, image/jpeg">
+    </div>
+    <form action="javascript:void(0);" id="form-product-create">
+        <div class="product-details">
+
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "name",
+                group = form_group_name,
+                placeholder = "Product Name",
+                value= ""
+
+            })
+            <div class="row-details">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                    id = "price",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "SRP Price",
+                    value=  (""),
+                    container_style= "width:300px;",
+                    attributes = "category='input-number'"
+                }) 
+                @await Html.PartialAsync("~/Views/Shared/components/SelectComponent.cshtml", new SelectComponentModel{
+                    id = "p_category",
+                    group = form_group_name,
+                    placeholder = "Category",
+                    value= "",
+                    Items = (",Herbal,Beverages,Package").Split(",").Select((x,idx) =>{
+                        if(idx == 0){
+                            return  new SelectItemComponentModel{
+                                attribute = "selected disabled",
+                                text = x,
+                                value = x
+                            };
+                        }else{
+                            return  new SelectItemComponentModel{
+                                attribute = "",
+                                text = x,
+                                value = x
+                            };
+                        }
+                    }).ToList(),
+                container_style= "margin-left:8px;width: 300px;"
+                })
+                @await Html.PartialAsync("~/Views/Shared/components/SelectComponent.cshtml", new SelectComponentModel{
+                    id = "product_type",
+                    group = form_group_name,
+                    placeholder = "Product Type",
+                    value= "Single Product",
+                    Items = ("Single Product,Package").Split(",").Select((x,idx) =>{
+                        return  new SelectItemComponentModel{
+                            attribute = "",
+                            text = x,
+                            value = x
+                        };
+                    }).ToList(),
+                    container_style= "margin-left:8px;width: 240px;"
+                })
+            </div>
+            <div class="row-details">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "non_membership_discounted_price",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "Non Members Discounted Price",
+                    value=  (""),
+                container_style= "width:300px;",
+                attributes = "category='input-number'"
+                }) 
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                    id = "membership_price",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "Membership Price",
+                    value=  (""),
+                    container_style= "width:300px;margin-left: 8px;",
+                    attributes = "category='input-number'"
+                }) 
+            </div>
+            <div class="row-details">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                    id = "profit",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "Company Profit",
+                    value=  (""),
+                    container_style= "width:300px;",
+                    attributes = "category='input-number'"
+                }) 
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "total_payout",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "Calculated Payout",
+                    value=  (""),
+                    container_style= "width:300px;margin-left: 8px;",
+                    attributes = "category='input-number'"
+                }) 
+            </div> 
+            <div class="row-details">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                    id = "mini_desc",
+                    type="text",
+                    group = form_group_name,
+                    placeholder = "Description",
+                    value=(""),
+                    container_style= "width: 100%;"
+                })
+            </div>
+        </div>
+        @Html.AntiForgeryToken()
+    </form>
+    <div class="package-selection" id="product-selected-container" style="display: none;">
+       <h5>Package Product Selection</h5>
+       <hr>
+        @*@await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+            id = "search-package-products",
+            type="text",
+            group = form_group_name,
+            placeholder = "Search Products",
+            value=  "",
+            container_style= "max-width:300px;",
+        })*@
+        <div class="product-list-container">
+            <ul class="selection-cards" id="selection-cards">
+                @if(Model.products.Count() > 0)
+                {
+                    foreach(var prod in Model.products.Where(x => x.p_is_package == false))
+                    {
+                        <li>
+                            <div class="card" name="product-card" data="@(prod.ident)">
+                                @if (prod?.picture == "" || prod?.picture == null)
+                                {
+                                    <img src="~/assets/design/Default_Image_Thumbnail.png" alt="" />
+                                }
+                                else
+                                {
+                                    <img class="img-style" src="@("data:image/jpg;base64,"+prod.picture)" />
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title">@prod.p_name</h5>
+                                    <p class="card-text text-danger">₱ @(prod?.p_price.ToString("#,##0.00") ?? "0.00")</p>
+                                    <span class="badge bg-success">@prod?.p_category</span>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <hr>
+        Selected Products
+        <hr>
+        <div class="row" id="selected-products-container">
+        </div> 
+    </div> 
+    <div class="container-pictures">
+        <div class="add-picture" id="btn-product-browse">
+            <span class="material-symbols-sharp">
+            backup
+            </span><br>
+            Upload
+        </div> 
+        <ul id="img-product-list">
+        </ul>
+        <input type="file" id="input-file-img-products" multiple hidden accept="image/png, image/gif, image/jpeg">
+    </div> 
+
+    <div class="rich-text-box">
+        <div class="centered">
+            <div id="editor">
+            </div>
+        </div>
+    </div>
+    <div class="button-actions">
+        <button class="btn btn-outline-danger" id="btn-reset">
+            <span class="material-symbols-sharp">
+            restart_alt
+            </span>
+            Reset
+        </button>
+        <button class="btn btn-primary" id="btn-submit">
+            <span class="material-symbols-sharp">
+            save
+            </span>
+            Submit
+        </button>
+    </div>
+</div>
+
+<script>
+    let productImagesObj = [];
+    let descEditor;
+    let selectedProducts = [];
+
+    ClassicEditor
+    .create( document.querySelector( '#editor' ), {
+        // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+    } )
+    .then( editor => {
+        descEditor = editor;
+    } )
+    .catch( err => {
+        console.error( err.stack );
+    } );
+
+    $(document).ready(() => { 
+        authenticateOperationsPage(() => {
+            
+        });
+        BreadCrumbData([{
+            title : "Products",
+            url : "/Operations" + "@Url.Action("Index","Products")"
+        }, {
+            title: "Create",
+            url: "/Operations" + "@Url.Action("Create","Products")"
+        }]);
+    })
+
+    $("#btn-cover-browse").on("click", ()=>{
+        $("#input-file-cover-img").click(); 
+    });
+
+    $("#input-file-cover-img").change(function (){
+        var file = this; 
+        if(file.files && file.files[0]){
+            userPhotoFile = file.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e){
+                $('#img-cover-photo').attr('src', e.target.result);
+                $('#img-cover-photo').attr('style', "object-fit: cover;");
+            }
+            reader.readAsDataURL(file.files[0]);
+        } 
+    });
+
+    $("#btn-product-browse").on("click", ()=>{
+        $("#input-file-img-products").click(); 
+    });
+
+    $("#input-file-img-products").change(function (){
+        var file = this; 
+        if(file.files && file.files[0]){
+            userPhotoFile = file.files[0];
+            productImagesObj = [...productImagesObj, ...file.files];
+            @* var reader = new FileReader();
+
+            reader.onload = function (e){
+                $('#img-cover-photo').attr('src', e.target.result);
+                $('#img-cover-photo').attr('style', "object-fit: cover;");
+            }
+            reader.readAsDataURL(file.files[0]);  *@
+            getProductImages();
+        } 
+    });
+
+
+    function getProductImages() {
+        $("#img-product-list").html("");
+        productImagesObj.forEach((img, idx) => {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#img-product-list").append(`
+                    <li>
+                        <div class="img-filter">
+                            <button class="btn btn-outline-dark" name="btn-img-product-remove" idx="${idx}">
+                                <span class="material-symbols-sharp">
+                                close
+                                </span>
+                            </button>
+                        </div>
+                        <img src="${e.target.result}" alt="">
+                    </li>
+                `);
+            }
+            reader.readAsDataURL(img);
+        })
+    }
+
+    $("body").delegate("button[name='btn-img-product-remove']", 'click',function(){
+        const idx = $(this).attr("idx"); 
+        productImagesObj.splice(idx, 1); // 2nd parameter means remove one item only
+        getProductImages();
+    });
+
+    $("#btn-reset").click(function(){
+        resetForms();
+    })
+
+    function resetForms(){
+        productImagesObj = [];
+        $("#input-file-cover-img").val("");
+        $("#input-file-img-products").val("");
+        $("#name").val("");
+        $("#price").val("");
+        $("#membership_price").val("");
+        $("#non_membership_discounted_price").val("");
+        $("#profit").val("");
+        $("#total_payout").val("");
+
+        $("#p_category").val("");
+        $("#mini_desc").val("");
+        $('#img-cover-photo').attr('src', "/assets/design/Default_Image_Thumbnail.png");
+        $('#img-cover-photo').attr('style', "object-fit: obtain;");
+        //ClassicEditor.instances['editor'].setData( '' );
+       // ClassicEditor.instances['editor'].setData('');
+
+        $('input[group="registration-group"]').removeClass("is-invalid");
+        $('select[group="registration-group"]').removeClass("is-invalid");
+        $(`span[group="registration-group"]`).text("");
+
+       getProductImages();
+       descEditor.setData("")
+    }
+
+    function clearErrors(){
+        $('input[group="registration-group"]').removeClass("is-invalid");
+        $('select[group="registration-group"]').removeClass("is-invalid");
+        $(`span[group="registration-group"]`).text("");
+    }
+
+    $("#btn-submit").on('click', function(){
+        
+        showDialogBoxMultiButtons({
+            title: "Create Product",
+            body: `Are you sure you want to add this product?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="createProductExecute()">Yes</button>`
+            ],
+            visibility: true
+        });
+    })
+
+    function createProductExecute(){ 
+        closeDialogBoxMultiButtons();
+        var form = $('#form-product-create');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData();
+        form_Data.append("__RequestVerificationToken", token);
+        form_Data.append("name", $("#name").val());
+
+        let srpPrice = parseFloat($("#price").val().replaceAll(",", "").replace("₱", "").replace(/[^\d.]/g, ''));
+        if (srpPrice > 0) {
+            form_Data.append("price", srpPrice);
+        }
+
+        let membership_price = parseFloat($("#membership_price").val().replaceAll(",", "").replace("₱", "").replace(/[^\d.]/g, ''));
+        if (membership_price > 0) {
+            form_Data.append("membership_price", membership_price);
+        }
+
+        let non_membership_discounted_price = parseFloat($("#non_membership_discounted_price").val().replaceAll(",", "").replace("₱", "").replace(/[^\d.]/g, ''));
+        if (non_membership_discounted_price > 0) {
+            form_Data.append("non_membership_discounted_price", non_membership_discounted_price);
+        }
+        
+        let profit = parseFloat($("#profit").val().replaceAll(",", "").replace("₱", "").replace(/[^\d.]/g, ''));
+        if (profit > 0) {
+            form_Data.append("profit", profit);
+        }
+
+        let total_payout = parseFloat($("#total_payout").val().replaceAll(",", "").replace("₱", "").replace(/[^\d.]/g, ''));
+        if (total_payout > 0) {
+            form_Data.append("total_payout", total_payout);
+        }
+
+
+
+        form_Data.append("p_category", ($("#p_category").val() ?? ""));
+        form_Data.append("mini_desc", ($("#mini_desc").val() ?? ""));
+        form_Data.append("description", descEditor.getData());
+
+        if($("#product_type option:selected").val() === "Package"){ 
+            form_Data.append("is_package", true);
+            if(selectedProducts.length > 0){ 
+                selectedProducts.forEach((prd, idx) => {
+                    form_Data.append(`package_product[${idx}].single_p_ref`, prd.id);
+                    form_Data.append(`package_product[${idx}].quantity`, prd.quantity);
+                });
+            }
+        } else {
+            form_Data.append("is_package", false);
+        }
+         
+
+
+        if ($('#input-file-cover-img')[0].files[0]) {
+            form_Data.append("cover_photo", $('#input-file-cover-img')[0].files[0]);
+        }
+         
+        if (productImagesObj.length > 0) {
+
+            productImagesObj.forEach(f => {
+                form_Data.append("pictures", f);
+            })
+            
+        }
+        clearErrors();
+        $.ajax({
+            url: "/Operations" + "@Url.Action("CreateAction","Products")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                showDialog(() => {
+                    window.location.href = "/Operations" + "@Url.Action("Index","Products")";
+                }, "SUCCESS", "Create Product", "Successfully Create new Product");
+                resetForms();
+            },
+            error: function (response) {
+               
+                const { responseJSON, status } = response; 
+                if (status === 400) {
+                    responseJSON.forEach(obj => {
+                        $(`#${obj.property_name}`).addClass("is-invalid");
+                        $(`#${obj.property_name}_text-error`).text(obj.message);
+                    });
+                     SHILoadingStop();
+                }else if (status === 401){
+                     refreshToken(() => {
+                         createProductExecute();
+                     });
+                }else{
+                     SHILoadingStop();
+                }
+            }
+        });
+
+
+    }
+
+
+    $("#product_type").change(() => {
+        if($("#product_type option:selected").val() === "Package"){
+            $("#product-selected-container").show();
+        }else{
+            $("#product-selected-container").hide();
+        }
+    });
+
+    $("div[name='product-card']").on('click', function(){
+            const ident = $(this).attr("data");
+            
+            selectProductForPackage(ident);
+    });
+    
+    function selectProductForPackage(productId){
+        const ident = productId;
+        SHILoadingStart();
+        $("#productList").html("");
+        $.ajax({
+            url: "/Operations" + `@Url.Action("getSignleProductsAction","Products")?id=${ident}`,
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                var found = false;
+                let foundIndex = 0;
+                for (var i = 0; i < selectedProducts.length; i++) {
+                    if (selectedProducts[i].id === parseInt(ident)) {
+                        found = true;
+                        foundIndex = i;
+                        break;
+                    }
+                } 
+                if(!found){ 
+                    selectedProducts.push({...response, quantity : 1});
+                }else{
+                    selectedProducts[foundIndex].quantity += 1;
+                } 
+                selectedProductGenerate();
+            },
+            error: function (response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        selectProductForPackage(productId);
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        })
+    }
+
+    function selectedProductGenerate(){
+        $("#selected-products-container").html(""); 
+        selectedProducts?.forEach(obj => {
+            let image_el = "";
+            if (obj?.product_img == "" || obj?.product_img == null) {
+                image_el = `<img src="~/assets/design/Default_Image_Thumbnail.png" alt="" />`;
+            }
+            else {
+                image_el = `<img class="img-style" src="@("data:image/jpg;base64,")${obj.product_img}" />`;
+            }
+
+            $("#selected-products-container").append(`
+                <div class="col-6 product-selected">
+                    <div class="card">
+                            ${image_el}
+                        <div class="prod-details">
+                            <h5>${obj.p_name}</h5>
+                            <p>₱ ${obj.price?.toLocaleString("en-US")}</p>
+                        </div>
+                        <input type="number" class="form-control" name="quantity-input" ident="${obj.id}" style="width: 80px;" value="${obj.quantity}">
+                            <div class="btn-close" name="btn-close" ident="${obj.id}">
+                            <span class="material-symbols-sharp" name="btn-close" ident="${obj.id}">
+                                close
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `);
+        })
+    }
+
+    $(document).on('change',"input[name='quantity-input']",(event) => {
+        const value = $(event.target).val();
+        const ident = $(event.target).attr("ident");
+         
+        if(value >= 0){ 
+            for (var i = 0; i < selectedProducts.length; i++) {
+                if (selectedProducts[i].id === parseInt(ident)) { 
+                    selectedProducts[i].quantity = parseInt(value);
+                    break;
+                }
+            } 
+            selectedProductGenerate(); 
+        }else{
+            $(event.target).val(0)
+        }
+    });
+
+    $(document).on('click', 'div[name="btn-close"]', (event) => {
+        const ident = $(event.target).attr("ident");  
+        selectedProducts = selectedProducts.filter(x => x.id != ident);
+        selectedProductGenerate();
+    });
+
+</script>

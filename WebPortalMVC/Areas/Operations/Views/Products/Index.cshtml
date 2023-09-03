@@ -1,0 +1,246 @@
+﻿@using Domain.Models.Components;
+@model Domain.DTO.Operations.Products.Output.ProductEditOutputDto;
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/styles/operations/Products/Index.css" rel="stylesheet" type="text/css" /> 
+
+<div class="products-page">
+    <div class="filter-head">
+        <div class="input-group">
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "txt-search",
+                group = "search",
+                placeholder = "Search"
+            })
+            <span class="material-symbols-sharp">
+                search
+            </span>
+        </div> 
+        @await Html.PartialAsync("~/Views/Shared/components/SelectComponent.cshtml", new SelectComponentModel{
+            id = "sex",
+            group = "search",
+            placeholder = "Category",
+            value="All",
+            Items = ("All,Package,Food Supplements, Beauty Products").Split(",").Select((x,idx) =>{
+                if(idx == 0){
+                    return  new SelectItemComponentModel{
+                        attribute = "selected",
+                        text = x,
+                        value = x
+                    };
+                }else{
+                    return  new SelectItemComponentModel{
+                        attribute = "",
+                        text = x,
+                        value = x
+                    };
+                }
+            }).ToList(),
+            container_style= "margin-left: 8px;"
+        }) 
+
+        <div class="filter-buttons"> 
+            <a href="@("/Operations" + @Url.Action("Create", "Products"))" class="btn btn-primary btn-filter">
+                <span class="material-symbols-sharp">
+                    add_box
+                </span>
+                Create Products
+            </a>
+        </div> 
+
+
+    </div>
+    
+    <div class="package-section">
+        <div class="head-title">
+            <h2>Package List</h2>
+            <span class="material-symbols-sharp first-span">arrow_back_ios</span>
+            <span class="material-symbols-sharp">arrow_forward_ios</span>
+        </div>
+        <div class="package-list">
+            <ul id="package-list"> 
+                 
+            </ul>
+        </div>
+    </div>
+    
+    <div class="products-section">
+        <div class="head-title">
+            <h2>Products List</h2> 
+        </div>
+        <div class="container products-list">
+            <div class="row" id="productList">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(() => { 
+        BreadCrumbData([{
+            title : "Products",
+            url : "/Operations" + "@Url.Action("Index","Products")"
+        }, {
+            title: "List",
+            url: "/Operations" + "@Url.Action("Index","Products")"
+        }]); 
+        authenticateOperationsPage(() => {
+            productData();
+        });
+    })
+
+    $("body").delegate("button[name='btn-delete']", 'click', function (e){
+        const id = $(this).attr("id");
+            showDialogBoxMultiButtons({
+            title: "Create Product",
+            body: `Are you sure you want to delete this product?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="executeDelete('${id}')">Yes</button>`
+            ],
+            visibility: true
+        });
+
+    })
+    
+   
+    function executeDelete(id){
+        closeDialogBoxMultiButtons();
+        SHILoadingStart();
+         $.ajax({
+            url: "@("/Operations" + Url.Action("DeleteAction", "Products") + "?id=")" + id,
+            type: "DELETE",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                showDialog(() => {
+                    window.location.href = "@Url.Content(@"~/Operations/Products/Index")";
+                }, "SUCCESS", "Delete Product", "Successfully Delete Product");
+            },
+            error: function (response){ 
+                const { status, responseText } = response;
+                if(status === 400){
+                    showDialog(() =>{
+                    },"DANGER","Products", responseText)
+                    SHILoadingStop();
+                }else if (status === 401){
+                   refreshToken(() => {
+                       executeDelete(id);
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+         })
+    }
+
+    function productData(){
+        SHILoadingStart();
+        $("#productList").html("");
+        $("#package-list").html("");
+        $.ajax({
+            url: "/Operations" + `@Url.Action("getProductsAction","Products")`,
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response){ 
+                response.forEach(item =>{
+                    const fixedNumber = Number.parseFloat(item.price).toFixed(2);
+                    let price_result = String(fixedNumber).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    let product_img = "";
+
+                    if (!item.product_img) {
+                        product_img = `<img class="img-style" src="/assets/img/Image_not_available.png" />`;
+                    } else {
+                        product_img = `<img class="img-style" src="${("data:image/jpg;base64," + item.product_img)}" />`;
+                    }
+                    if (item.package) {
+                        $("#package-list").append(`
+                            <li>
+                                <div class="card">
+                                    <a href="@(Url.Content("/Operations/Products/Index"))/${item.id}">
+                                        ${product_img}
+                                        <div class="card-body">
+                                            <h4>${item.p_name}</h4>
+                                            <small>₱ ${price_result}</small>
+                                            <p class="card-text">${item.mini_desc}</p>
+                                        </div>
+                                    </a>
+                                    <div class="btn-sec">
+                                        <a href="@("/Operations" + Url.Action("Edit", "Products"))?id=${item.id}" class="btn btn-primary">
+                                            <span class="material-symbols-sharp">
+                                                edit
+                                            </span>
+                                            Edit
+                                        </a>
+                                        <button href="#" class="btn btn-outline-danger" id="${item.id}" name="btn-delete">
+                                            <span class="material-symbols-sharp">
+                                                delete
+                                            </span>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        `);
+                    }else{
+                        $("#productList").append(`
+                            <div class="col col-lg-3 col-md-4 col-sm-6">
+                                <div class="card">
+                                    <a href="@(Url.Content("/Operations/Products/Index"))/${item.id}">
+                                        ${product_img}
+                                        <div class="card-body">
+                                            <h4>${item.p_name}</h4>
+                                            <small>₱ ${price_result}</small>
+                                            <p class="card-text">${item.mini_desc}</p>
+                                        </div>
+                                    </a>
+                                    <div class="btn-sec">
+                                        <a href="@("/Operations" + Url.Action("Edit", "Products") + "?id=${item.id}")" class="btn btn-primary">
+                                            <span class="material-symbols-sharp">
+                                                edit
+                                            </span>
+                                            Edit
+                                        </a>
+                                        <button href="#" class="btn btn-outline-danger" id="${item.id}" name="btn-delete">
+                                            <span class="material-symbols-sharp">
+                                                delete
+                                            </span>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    
+                })
+                SHILoadingStop();
+            },
+            error: function (response){
+                const { status, responseText } = response;
+                if (status === 401){
+                   refreshToken(() => {
+                       productData();
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+        })
+    }
+
+
+
+    function redirectionToAction(url){
+        window.location.href = url;
+    }
+
+</script>

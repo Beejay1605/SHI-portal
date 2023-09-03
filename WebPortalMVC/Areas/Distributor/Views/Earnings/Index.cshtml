@@ -1,0 +1,228 @@
+﻿@using Domain.DTO.BaseDto;
+@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Earnings";
+    Layout = "~/Views/Shared/_LayoutDistributors.cshtml";
+}
+
+
+<link href="~/styles/operations/financial/index.css" rel="stylesheet" type="text/css" />
+<br/>
+<div class="financial-page">
+    <div class="row">
+        <h2>Payout History</h2>
+        <hr/>
+        <div class="table-container">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>DISTRIBUTOR</th>
+                    <th>AMOUNT</th>
+                    <th>DATE</th>
+                    <th>PROCESS BY</th>
+                </tr>
+                </thead>
+                <tbody id="table-payouts">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="financial-page">
+    <div class="row">
+        <div class="col-12">
+            <h2>Direct & Indirect Referals</h2>
+            <hr/>
+            <div class="table-container">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Date Time</th>
+                        <th>Type</th>
+                        <th>Beneficiary</th>
+                        <th>From</th>
+                        <th>Amount</th>
+                        <th>Payment Status</th>
+                        <th>Encash Request</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-referals">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="financial-page">
+    <div class="row">
+        <div class="col-12">
+            <h2>Pairing Bonus</h2>
+            <hr/>
+            <div class="table-container">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Date Time</th>
+                        <th>Beneficiary</th>
+                        <th>LEFT</th>
+                        <th>RIGHT</th>
+                        <th>Amount</th>
+                        <th>Payment Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-pairings">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="financial-page">
+    <div class="row">
+        <div class="col-12">
+            <h2>Uni-Level</h2>
+            <hr/>
+            <div class="table-container">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date Time</th>
+                            <th>Availability</th>
+                            <th>Beneficiary</th>
+                            <th>Purchase By</th>
+                            <th>Transaction #</th>
+                            <th>Amount</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-unilevel">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+   $(document).ready(function () { 
+        authenticateDistributorPage(() => {
+            getFinancials();
+        });
+        BreadCrumbData([
+            {
+                title: "Financials",
+                url: "@(Url.Content($"~/Distributor/Earnings/"))"
+            }, {
+                title: "Earnings",
+                url: "@(Url.Content($"~/Operations/Earnings/"))"
+            }
+        ])
+    }); 
+   
+   
+   
+   function getFinancials(){
+        SHILoadingStart();   
+        $.ajax({
+            url: "/Distributor" + "@Url.Action("MyEarnings","Earnings")",
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                console.log(data);
+                $("#table-payouts").html("");
+                $("#table-referals").html("");
+                $("#table-pairings").html("");
+                $("#table-unilevel").html("");
+                const { payouts, referals, pairings, unilevel } = data;
+                
+                payouts?.forEach(po => {
+                    $("#table-payouts").append(`
+                        <tr>
+                            <td>${po.ident}</td>
+                            <td>${po.distributors_details.first_name} ${po.distributors_details.last_name}</td>
+                            <td>₱ ${po.amount.toLocaleString(undefined, {
+                               minimumFractionDigits: 2,
+                               maximumFractionDigits: 2
+                             })}</td>
+                            <td>${po.created_dt.replace('T',' ')}</td>
+                            <td>ADMIN</td>
+                        </tr>
+                    `);
+                });
+                
+                referals?.forEach(rf => {
+                    $("#table-referals").append(`
+                        <tr>
+                            <td>${rf.created_dt.replace("T"," ")}</td>
+                            <td>${rf.type.replace("_"," ")}</td>
+                            <td>${rf.dist_details?.first_name} ${rf.dist_details?.last_name}</td>
+                            <td>${rf.from_dist_details?.first_name} ${rf.from_dist_details?.last_name}</td>
+                            <td>₱ ${rf.amount.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}</td>
+                            <td>${rf.is_paid ? "PAID" : "PENDING"}</td>
+                            <td>n/a</td>
+                        </tr>
+                    `);
+                });
+                
+                pairings?.forEach(pb => {
+                    $("#table-pairings").append(`
+                        <tr>
+                            <td>${pb.dt_created.replace("T", " ")}</td>
+                            <td>${pb.ben_dist_details?.first_name ?? ""} ${pb.ben_dist_details?.last_name ?? ""}</td>
+                            <td>${pb.right_dist_details?.first_name ?? ""} ${pb.right_dist_details?.last_name ?? ""}</td>
+                            <td>${pb.left_dist_details?.first_name ?? ""} ${pb.left_dist_details?.last_name ?? ""}</td>
+                            <td>₱ ${pb.earn_amount.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}</td>
+                            <td>${(pb.is_paid ? "PAID" : "PENDING")}</td>
+                        </tr>
+                    `)
+                });
+                
+                unilevel?.forEach(ul => {
+                    $("#table-unilevel").append(`
+                        <tr>
+                            <td>${ul.created_dt.replace("T", " ")}</td>
+                            <td>${ul.available_dt.replace("T", " ")}</td>
+                            <td>${ul.dist_details.first_name} ${ul.dist_details.last_name}</td>
+                            <td>n/a</td>
+                            <td>${ul.transact_ident}</td>
+                            <td>₱ ${ul.amount.toLocaleString(undefined, {
+                               minimumFractionDigits: 2,
+                               maximumFractionDigits: 2
+                             })}</td>
+                            <td>${(ul.is_paid ? "PAID" : "PENDING")}</td>
+                        </tr>
+                    `);
+                })
+                
+                SHILoadingStop(); 
+            },
+            error: function (response){ 
+                const { status, responseText } = response;
+                if (status === 401){
+                   refreshToken(() => {
+                       getFinancials();
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+        });  
+   }
+   
+   
+</script>

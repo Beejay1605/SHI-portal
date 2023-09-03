@@ -1,0 +1,55 @@
+ @using System.Web;
+@model Domain.Models.Components.SelectComponentModel;
+
+<div class="floating-input@(Model.container_class)" style="@Model.container_style">
+    <select type="@Model.type" class="form-control@(Model.input_class)" id="@Model.id" style="@(Model.input_style)" component="float-input" group="@Model.group">
+        
+        @if (Model.will_use_group == true)
+        {
+            if(Model.Group_items.Count() > 0)
+            {
+                foreach (var item in Model.Group_items)
+                {
+                    
+                    <optgroup label="@item.label">
+                        @foreach(var opt in item.Items)
+                        {
+                            Html.Raw((@$"<option value='{opt.value}' {opt.attribute}>{opt.text}</option>"));
+                        }
+                    </optgroup> 
+                } 
+            }
+        }
+        else
+        {
+            if (Model.Items.Count() > 0)
+            {
+                foreach (var item in Model.Items)
+                { 
+
+                        @Html.Raw((@$"<option value='{item.value}' {item.attribute}>{item.text}</option>"))
+
+                }
+            }
+        }
+    </select>
+    <label class="" for="@(Model.id)" id="@(Model.id)_label" component="float-input" group="@(Model.group)">@Model.placeholder</label>
+    <span class="text-danger" component="float-input" id="@(Model.id)_text-error" group="@(Model.group)"></span>
+</div>
+
+<script>
+    if("@Model.value" !== ""){
+        $("#@(Model.id)_label").addClass("on-focus-input");
+    }
+    $("#@Model.id").focus(() => {
+      $("#@(Model.id)_label").addClass("on-focus-input");
+    });
+
+    $("#@Model.id").focusout(() => {
+      let this_value = $("#@Model.id option:selected").val();  
+      if(!this_value){
+        $("#@(Model.id)_label").removeClass("on-focus-input");
+      }
+    });
+
+</script>

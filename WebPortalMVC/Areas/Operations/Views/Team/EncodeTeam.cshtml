@@ -1,0 +1,318 @@
+@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Encode Team";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+
+
+<link href="~/styles/operations/team-chart/EncodeTeam.css" rel="stylesheet" type="text/css" />
+<div class="team-encode-page">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <br/>
+                <form action="javascript:void(0);" id="form-encode-details">
+                    <div class="search-dist">
+                        @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                               {
+                                   id = "distributor-id",
+                                   group = "",
+                                   placeholder = "Enter Distributor ID",
+                                   value = ViewBag.ID.ToString()
+                               })
+                        <button class="btn btn-dark" id="btn-search">Search</button>
+                    </div>
+                    @Html.AntiForgeryToken()
+                    <br/>
+                    @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                           {
+                               id = "txt-upline-fullname",
+                               group = "",
+                               placeholder = "Upline Full Name",
+                               attributes = "disabled",
+                               value = ViewBag.UPLINE_FULLNAME
+                           })
+                    @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                           {
+                               id = "txt-position",
+                               group = "",
+                               placeholder = "Position",
+                               attributes = "disabled",
+                               value = ViewBag.POSITION
+                           })
+                    <br/>
+                    @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                           {
+                               id = "key-code",
+                               group = "",
+                               placeholder = "Enter Pay-in code (XXXX - XXXX - XXXX - XXXX)"
+                           })
+                    <br/>
+                    @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                   {
+                       id = "distributor-upline",
+                       group = "",
+                       placeholder = "Enter Upline ID Number"
+                   })
+                    <hr/>
+                    <button class="btn btn-primary" id="btn-submit">Submit</button>
+                </form>
+            </div>
+            <div class="col-8">
+                <div class="distributor-details">
+                    
+                    <div class="row dist-details" id="dist-details" style="display: none;"> 
+                        <div class="col-2">
+                            <img class="" id="dist-img" src="/assets/img/userimg.png"/>
+                        </div>
+                        <div class="col-6">
+                            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                                   {
+                                       id = "fullname",
+                                       group = "",
+                                       placeholder = "Full Name",
+                                       input_style = "background-color: #f1f1f1;",
+                                       attributes = "disabled",
+                                       value = ""
+                                   })
+                            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                                   {
+                                       id = "id-number",
+                                       group = "",
+                                       placeholder = "Distributor ID",
+                                       input_style = "background-color: #f1f1f1;",
+                                       attributes = "disabled",
+                                       value = ""
+                                   })
+                            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                                   {
+                                       id = "gender",
+                                       group = "",
+                                       placeholder = "Gender",
+                                       input_style = "background-color: #f1f1f1;",
+                                       attributes = "disabled",
+                                       value = ""
+                                   })
+                            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                                   {
+                                       id = "address",
+                                       group = "",
+                                       placeholder = "Complete Address",
+                                       input_style = "background-color: #f1f1f1;",
+                                       attributes = "disabled",
+                                       value = ""
+                                   })
+                            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                                   {
+                                       type = "date",
+                                       id = "birth-date",
+                                       group = "",
+                                       placeholder = "Birth Date",
+                                       input_style = "background-color: #f1f1f1;",
+                                       attributes = "disabled",
+                                       value = "1996-12-23"
+                                   })
+                            <button class="btn btn-dark" id="btn-clear">CLEAR</button>
+                        </div>
+                        <div class="col-4 total-accounts">
+                            <div class="cont">
+                                <h1 class="text-primary" id="total-accounts">0</h1>
+                                <hr/>
+                                <p class="text-secondary">Accounts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () { 
+        authenticateOperationsPage(() => {
+            $("#btn-search").click();
+        });
+        BreadCrumbData([
+            {
+                title: "Team Chart",
+                url: "@(Url.Content($"~/Operations/Distributors/{ViewBag.ID}/Team/"))"
+            }, {
+                title: "Chart",
+                url: "@(Url.Content($"~/Operations/Distributors/{ViewBag.ID}/Team/"))"
+            },
+            {
+                title: "Encode Downline",
+                url: "@(Url.Content($"~/Operations/Distributors/{ViewBag.ID}/Team/Encode/{ViewBag.DATA}"))"
+            }
+        ])
+    }); 
+    
+    let distributorId = 0;
+    $("#btn-search").on('click', () => {
+        GetDistributor();
+    });
+    
+    $("#btn-clear").on('click', () => {
+        clearDistributor();
+    });
+    
+    function GetDistributor(){
+        let ident = $("#distributor-id").val();
+        if (!ident){
+            showDialog(() => {
+                
+            }, "DANGER", "Encode Team Validation", "Distributor ID is required");
+            return;
+        }
+        SHILoadingStart(); 
+        ident = ident.replaceAll("PH","").replaceAll("ph","");
+        $.ajax({
+            url: "@("/Operations" + Url.Action("DistributorDetails", "Team") + "?id=")" + parseInt(ident),
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                console.log(data);
+                const {
+                    first_name,
+                    last_name,
+                    suffix_name,
+                    ident,
+                    user_picture_base_64,
+                    complete_address,
+                    birth_date,
+                    gender
+                } = data.details;
+                distributorId = ident;
+                
+                let usr_image = "";
+                
+                if (!user_picture_base_64) {
+                    usr_image = `/assets/img/Image_not_available.png`;
+                } else {
+                    usr_image = `data:image/jpg;base64,${user_picture_base_64}`;
+                }
+
+                $("#dist-details").show();  
+                $("#dist-img").attr("src", usr_image);
+                $("#fullname").val(`${first_name} ${last_name} ${suffix_name}`);
+                $("#id-number").val(`${ident}`);
+                $("#gender").val(`${gender}`);
+                $("#address").val(`${complete_address}`);
+                $("#birth-date").val(`${birth_date.substring(0, 10)}`);
+                $("#total-accounts").text(data.totalAccounts);
+                
+                SHILoadingStop();
+            },
+            error: function (response){ 
+                const { status, responseText } = response;
+                distributorId = 0;
+                if(status === 400){
+                    SHILoadingStop();
+                }else if (status === 401){
+                   refreshToken(() => {
+                       GetDistributor();
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+        })
+    }
+    
+    function clearDistributor(){
+        $("#fullname").val(``);
+        $("#id-number").val(``);
+        $("#gender").val(``);
+        $("#address").val(``);
+        $("#birth-date").val(``);
+        distributorId = 0;
+        $("#dist-details").hide();
+    }
+
+    function EncodeTeam(){
+        closeDialogBoxMultiButtons();
+        if (distributorId === 0){
+            showDialog(() => {
+                // console.log(response);
+            }, "DANGER", "Pay-in Code", "Distributor is required");
+            return;
+        }
+        
+        SHILoadingStart();
+        var form = $('#form-encode-details');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData();
+        form_Data.append("__RequestVerificationToken", token); 
+        form_Data.append("key_code", $("#key-code").val().replaceAll("-",""));
+        form_Data.append("distributor_id", distributorId);
+        form_Data.append("upline_id", "@ViewBag.ID");
+        form_Data.append("binary_data", "@ViewBag.DATA");
+        form_Data.append("imaginary_upline_id", $("#distributor-upline").val());
+        
+        $.ajax({
+            url: "/Operations" + "@Url.Action("EncodePayIns","Team")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                showDialog(() => {
+                    //console.log(response);
+                    window.location.href = "@Url.Content($"~/Operations/Distributors/{ViewBag.ID}/Team")"
+                }, "SUCCESS", "Pay-in Code", "Successfully encode team");
+            },
+            error: function (response) {
+                SHILoadingStop();
+                const { responseJSON, status } = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        EncodeTeam();
+                    });
+                }else if(status === 400) {
+                     responseJSON.forEach(obj => {
+                         $(`#${obj.property_name}`).addClass("is-invalid");
+                         $(`#${obj.property_name}_text-error`).text(obj.message);
+                     });
+                     SHILoadingStop();
+                }else{
+                    SHILoadingStop();    
+                }
+            }
+        });
+    }
+    
+    $("#key-code").on('change', () => {
+        const  key = $("#key-code").val().replaceAll("-","");
+        $("#key-code").val(addDashes(key)); 
+    });
+    
+    function addDashes(str) {
+      var result = [];
+      
+      for (var i = 0; i < str.length; i += 4) {
+        result.push(str.substring(i, i + 4));
+      }
+      
+      return result.join('-');
+    }
+    
+    $("#btn-submit").on('click', function (){
+        showDialogBoxMultiButtons({
+            title: "Encode New Distributor Account",
+            body: `Are you sure you want to encode this account?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="EncodeTeam()">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+</script>

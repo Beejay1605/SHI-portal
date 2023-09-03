@@ -1,0 +1,455 @@
+﻿@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Point Of Sale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/styles/operations/pos/Index.css" rel="stylesheet" type="text/css" /> 
+
+<style>
+    .card-body {
+        padding: 0;
+    }
+</style>
+<div class="POS-main">
+    <div class="row main-header">
+        <div class="col-8 mb-3 row-main">
+            <div class="input-group">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                           id = "input-search",
+                           group = "",
+                           placeholder = "Search",
+                           value= ""
+                       }) 
+                <button type="button" id="btn-bar-code" class="btn btn-primary ml-2 mr-2">
+                    <span class="material-symbols-sharp">
+                        barcode_scanner
+                    </span>
+                    <span class="float-end" style="margin-left: auto">Bar/QR Code</span>
+                </button>
+                <a href="@("/Operations" + @Url.Action("Void","POS"))" class="btn btn-outline-danger ml-3 mt-3" style="margin-left: 12px"> 
+                    <span class="material-symbols-outlined">
+                        contract_delete
+                    </span> Void Transaction
+                </a>
+            </div>
+            <div class="user-profile bg-dark" id="distrbutor-container" ident="" group="user-card" style="display: none;">
+                <img src="" id="distributor-img" ident="" group="user-card"/>
+                <div class="info" ident="" group="user-card">
+                    <p id="distributor-fullname" ident="" group="user-card">--</p>
+                    <small id="distributor-id" ident="" group="user-card">--</small>
+                </div>
+                <span class="material-symbols-sharp" id="btn-distributor-close">
+                    close
+                </span>
+            </div>
+        </div>
+        <div class="col-4 p-1 mb-2">
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "search-distributor",
+                       group = "",
+                       placeholder = "Search Distributor ID",
+                       value= ""
+                   })
+            <span class="text-danger" id="error-status-distributore"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8" style="overflow-y: scroll; max-height: 780px;">
+            <div class="row mb-2" id="product-list-container">
+                
+            </div> 
+        </div>
+        <div class="col-4 px-4" style="position: sticky; top: 0;">
+            <h5 class="float-lg-start">Curent Order</h5>
+            <br />
+            <hr/>
+            <span class="float-end" id="current-time"></span>
+            <br /> 
+            <br/>
+            <div class="product-carts p-1 mb-2" id="product-carts">
+                
+            </div>
+            <hr class="custom-hr" style="border: 2px solid #1A936F;" />
+            <div class="row g-0 ">
+                <div class="col-8 pe-0 d-flex align-items-center">
+                    <div class="ms-1">
+                        <span class="card-title fw-bold">Subtotal</span>
+                        <br>
+                        <span class="card-title fw-bold">VAT</span>
+                        <br>
+                        <span class="card-title fw-bold">Total</span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="">
+                        <div class="d-flex justify-content-end align-items-center ">
+                            <div class="text-end me-2 " style="padding-top:0.7rem;">
+                                <span class="fw-bold" style="color:#1A936F;" id="text-sub-total">₱ 400.00</span>
+                                <br>
+                                <span class="small" style="color:#999999;">N/A</span>
+                                <br />
+                                <span class="fw-bold" style="color:#FF5959;" id="text-total">₱ 400.00</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button class="form-control" style="background-color:none; border-color:#114B5F; color:#114B5F; margin-top:45px; height:45px;" disabled> <span class="float-start fw-bold ms-2">Pay By Cash</span> <i class="bi bi-cash-coin float-end" style="font-weight:bold;color:#114B5F; font-size:20px;"></i> </button>
+            <button class="form-control align-content-center" disabled style="background-color:none; border-color:#999999; color:#999999; margin-top:5px; height:40px;"> <span class="float-start fw-bold ms-2">Pay By Card</span> <i class="bi bi-credit-card-2-back float-end " style="font-weight:bold;color:#999999; font-size:20px;"></i> </button>
+            <button class="form-control" id="btn-checkout" style="background-color:#1A936F; border-color:#1A936F; color:#FDFDFD; margin-top:5px; height:40px;"> <span class="float-start fw-bold ms-2">CHECK OUT</span> <i class="bi bi-arrow-right  float-end" style="font-weight:bold;"></i> </button>
+        </div>
+    </div>
+</div>
+
+<form action="javascript:void(0);" id="form-purchase-product">
+    @Html.AntiForgeryToken()
+</form>
+
+<script>
+    let productsState = [];
+    let selectedProducts = [];
+    let selectedDistributor = "";
+    let totalPrice = 0 ;
+    $(document).ready(() => {
+        BreadCrumbData([{
+            title : "Point of Sale",
+            url : "/Operations" + "@Url.Action("Index","POS")"
+        }, {
+            title: "Transaction",
+            url: "/Operations" + "@Url.Action("Index","POS")"
+        }]);
+        authenticateOperationsPage(() => {
+            timeUpdating() ;
+            onLoadPageData();
+        });
+        
+    });
+    
+    function timeUpdating(){
+        setTimeout(() => {
+            const date = new Date();
+            const formattedDateTime = date.toLocaleString('en-US', {
+              month: '2-digit',
+              day: '2-digit',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+            });
+            $("#current-time").html(formattedDateTime);
+            timeUpdating();
+        }, 1000);
+    }
+    
+    $("#btn-bar-code").on("click", () => {
+        showDialog(() => {
+            
+        }, "DANGER", "Bar code", "Comming soon...");
+    });
+    
+    $("#input-search").on('change',(event) => {
+        if ($(event.target).val()){ 
+            onLoadPageData();
+        }
+    });
+    
+    $("#input-search").on('keyup',(event) => {
+        if (!$(event.target).val()){ 
+            onLoadPageData();
+        }
+    });
+    
+    function onLoadPageData(){
+        SHILoadingStart();
+        $("#product-list-container").html("");
+        const search = $("#input-search").val() ?? "";
+        $.ajax({
+            url: "/Operations" + "@Url.Action("GetAllProducts","POS")?search=" + search,
+            type: "GET", 
+            contentType:false,
+            processData:false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) { 
+                SHILoadingStop();
+                productsState = response?.products;
+                response?.products?.forEach(obj => {
+                    
+                    let price = obj.non_membership_discounted_price ?? obj.p_price;
+                    let oldPrice = obj.non_membership_discounted_price;
+                    
+                    let formattedPrice = price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    
+                    if (!obj.non_membership_discounted_price){
+                        oldPrice = "";
+                    }else{
+                        oldPrice = "₱ "+obj.non_membership_discounted_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                    }
+  
+                    $("#product-list-container").append(`
+                        <div class="col-3">
+                            <div class="card">
+                                <img src="data:image/jpg;base64,${obj.picture}" class="card-img-top" />
+                                <div class="card-body">
+                                    <p class="card-title">${obj.p_name}</p>
+                                    <div class="pricing">
+                                        <small class="card-text old-price text-secondary">${oldPrice}</small>
+                                        <small class="card-text" style="font-weight: 500;">₱ ${formattedPrice}</small>
+                                    </div>
+                                    <span class="badge bg-dark">${obj.p_category}</span>
+                                    <button class="form-control" name="add-to-cart" ident="${obj.ident}" style="background-color:#1A936F; color:#FDFDFD; border-radius:0;">
+                                        <span ident="${obj.ident}" class="material-symbols-sharp float-start">
+                                        add_shopping_cart
+                                        </span>
+                                        <span ident="${obj.ident}" class="float-end">Add to cart</span> 
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                    `);
+                });
+            },
+            error: function (response) {  
+                const { responseJSON, status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        DistributorsData();
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        });
+    }
+    
+    $(document).on('click','button[name="add-to-cart"]', (event) => { 
+        const ident = $(event.target).attr("ident"); 
+        let product = selectedProducts.find(x => x.productId === ident);
+        
+        if (product){
+            product.quantity += 1;
+        }else{
+            selectedProducts.push({
+                productId : ident,
+                quantity : 1
+            });
+        }
+        orderDomRefresher();
+    });
+    
+    $("body").delegate('button[name="btn-remove"]','click', (event) => {
+        const id = $(event.target).attr("ident");
+        selectedProducts = selectedProducts.filter(x => x.productId !== id);
+        orderDomRefresher();
+    });
+    
+    function orderDomRefresher(){
+        $("#product-carts").html("");
+        totalPrice = 0;
+        selectedProducts.forEach(sp => {
+            const prodId = parseInt(sp.productId);
+            let product = productsState.find(x => prodId === x.ident);
+             
+            let price = product?.p_price?.toFixed(2)?.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            let oldPrice = price;
+            let unitPrice = product?.p_price; 
+            
+            if (selectedDistributor !== ""){ // if 
+                if (!product.membership_price){
+                    price = "";
+                }else{
+                    unitPrice = product.membership_price;
+                    price = `<small class='card-text small' style='font-weight: 500;'>₱ ${product.membership_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</small>`;
+                }
+            }else{
+                if (!product?.non_membership_discounted_price){
+                    price = "";
+                }else{
+                    unitPrice = product?.non_membership_discounted_price;
+                    price = `<small class='card-text small' style='font-weight: 500;'>₱ ${product.non_membership_discounted_price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</small>`;
+                }
+            }
+            let totalUnitPrice = parseFloat(unitPrice * sp.quantity).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            totalPrice += (unitPrice * sp.quantity); 
+            $("#product-carts").append(`
+                <div class="card p-1 mb-2 col-12" style="border-radius:0px; border-color:#88D498">
+                    <div class="row g-0">
+                        <div class="col-8 pe-0 d-flex align-items-center">
+                            <img src="data:image/jpg;base64,${product.picture}" style="border-radius: 0px; height: 60px; width: 50px;" class="card-img-top" alt="...">
+                            <div class="ms-1">
+                                <span class="card-title fw-bold">${product.p_name}</span>
+                                <span class="card-text small" style="color:#999999;${(price ? "text-decoration-line: line-through;" :"")}">SRP: ₱ ${oldPrice}</span>
+                                ${price}
+                                <br/>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="">
+                                <div class="d-flex justify-content-end align-items-center ">
+                                    <div class="text-end me-2 " style="padding-top:0.7rem;">
+                                        <span class="fw-bold" style="color:#1A936F;">₱ ${totalUnitPrice}</span>
+                                        <span class="small" style="color:#999999;">x${sp.quantity}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" name="btn-remove" ident="${product.ident}">
+                        <span class="material-symbols-sharp" id="btn-distributor-close"  ident="${product.ident}">
+                            close
+                        </span>                    
+                    </button>
+                </div> 
+            `);
+        }); 
+        
+        $("#text-sub-total").html(`₱ ${totalPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        $("#text-total").html(`₱ ${totalPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`);
+        
+    }
+    
+    $("#distrbutor-container").on('click', (event) => {
+        const id = $(event.target).attr("ident");
+        if (!id){
+            $("#search-distributor").val("")
+            return;
+        }
+        window.open(`/Operations@(Url.Action("Details","Distributors"))?id=${id}`);
+    });
+    
+    $("#btn-distributor-close").on('click', (event) => {
+        $("#distrbutor-container").hide();
+        $("[group='user-card']").attr("ident","");
+        $("#distributor-img").attr("src", "");
+        $("#error-status-distributore").html("");
+        $("#distributor-fullname").html(``);
+        $("#distributor-id").html("");
+        selectedDistributor = "";
+        orderDomRefresher();
+    });
+    
+    $("#search-distributor").on('change', (event)=> {
+        const ident = $(event.target).val();
+        
+        $("#error-status-distributore").html("");
+        $("#distrbutor-container").hide();
+        selectedDistributor = "";
+        $.ajax({
+            url: "/Operations" + "@Url.Action("Distributor","POS")?id=" + ident,
+            type: "GET", 
+            contentType:false,
+            processData:false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) { 
+                SHILoadingStop(); 
+                let imageSrc = "";
+                if (response){
+                    imageSrc = `data:image/jpg;base64,${response.user_picture_base_64}`;
+                }else{
+                    imageSrc = "/assets/img/userimg.png";
+                }
+                $("#distributor-img").attr("src", imageSrc);
+                $("#error-status-distributore").html("");
+                $("[group='user-card']").attr("ident",response.ident);
+                $("#distributor-fullname").html(`${response.first_name} ${response.last_name}`);
+                $("#distributor-id").html(response.ui_id);
+                $("#distrbutor-container").show();
+                selectedDistributor = response; 
+                orderDomRefresher();
+            },
+            error: function (response) { 
+                const { responseText, status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        DistributorsData();
+                    });
+                }else{  
+                    console.log(responseText);
+                    $("#error-status-distributore").html(responseText);
+                    $("#distrbutor-container").hide();
+                    selectedDistributor = "";   
+                    SHILoadingStop();              
+                }
+                
+            }
+        });
+    });
+    
+    $("#btn-checkout").on("click", function (){
+        if (selectedProducts.length === 0){
+            return;
+        }
+        showDialogBoxMultiButtons({
+            title: "Purchase Product",
+            body: `Are you sure you want to process this purchase?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="PurchaseExecuteAction()">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+    
+    function PurchaseExecuteAction(){
+        closeDialogBoxMultiButtons();
+        var form = $('#form-purchase-product');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData(); 
+        form_Data.append("__RequestVerificationToken", token); 
+          
+        selectedProducts.forEach((obj, idx) => {
+            const {productId, quantity} = obj;
+            form_Data.append(`prod_quantity[${idx}].productId`, productId);
+            form_Data.append(`prod_quantity[${idx}].quantity`, quantity);
+        });
+        
+        if (selectedDistributor.ui_id){
+            form_Data.append("distributor_id", selectedDistributor.ui_id); 
+        }
+        SHILoadingStart();
+        
+        $.ajax({
+            url: "/Operations" + "@Url.Action("PurchaseAction","POS")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                console.log(response);
+                SHILoadingStop();
+                showDialog(() => {
+                    window.location.href = "/Operations"+"@Url.Action("ReceiptPurchase","POS")?id="+ response;
+                }, "SUCCESS", "Create Product", "Successfully Create new Product");
+                resetForms();
+            },
+            error: function (response) {
+               
+                const { responseJSON, status, responseText } = response; 
+                console.log(response);
+                if (status === 400) {
+                    showDialog(() => {
+                                            
+                    }, "DANGER", "Inventory Validation", responseText);
+                     SHILoadingStop();
+                }else if (status === 401){
+                     refreshToken(() => {
+                         createProductExecute();
+                     });
+                }else{
+                     SHILoadingStop();
+                }
+            }
+        });
+        
+    }
+    
+    
+</script>

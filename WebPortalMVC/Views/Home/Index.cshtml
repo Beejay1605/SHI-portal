@@ -1,0 +1,407 @@
+﻿@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+
+}
+
+<link href="~/styles/public/onlineshop.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
+
+
+<div class="Main">
+
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <a asp-action="Index"><div class=""><img src="~/assets/logo/onlinestorelogo.svg" class="MainLogo"></div></a>
+        </div>
+
+        <div class="top-bar__right">
+            <div class="search me-2">
+                <input type="text" placeholder="Search..." class="searchinput">
+                <button class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+            <div class="account"><i class="fa fa-user" aria-hidden="true"></i> Account</div>
+            <div class="shopping"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</div>
+            <div class="hamburger">
+                <i class="fa fa-bars burger"></i>
+            </div>
+        </div>
+    </header>
+    <div class="menu">
+        <span class="close-button">&times;</span>
+        <nav class="mobile-nav">
+            <ul>
+                <li onclick="location.href='@Url.Action("Index", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Products</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-archive" aria-hidden="true"></i> Packages</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-user" aria-hidden="true"></i> User</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="carousel-mainDiv">
+        <div class="row">
+            <div class="col px-0">
+                <div id="carouselExample" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner mt-lg-5 ">
+                        <div class="carousel-item active">
+                            <div class="image-container position-relative">
+                                <img src="~/assets/img/brown.png" class="d-block carpic " alt="Slide 1">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <h3>Slide 1 Caption</h3>
+                                        <p>This is the caption for Slide 1.</p>
+                                        <button class="shopnow"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Shop now</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-caption text-dark">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="image-container position-relative">
+                                <img src="~/assets/img/red.png" class="d-block carpic" alt="Slide 2">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <h3>Slide 1 Caption</h3>
+                                        <p>This is the caption for Slide 1.</p>
+                                        <button class="shopnow"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Shop now</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-caption text-dark">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="image-container position-relative">
+                                <img src="~/assets/img/ssfasfa.png" class="d-block  carpic" alt="Slide 1">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <h3>Slide 1 Caption</h3>
+                                        <p>This is the caption for Slide 1.</p>
+                                        <button class="shopnow"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Shop now</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-caption text-dark">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="best-sellers">
+        <h1>Best sellers</h1>
+    </div>
+    <div class="subheader w-100">
+        <ul class="category-list">
+            <li class="category-item active" onclick="location.href='@Url.Action("Products", "Home")'">All products</li>
+            <li class="category-item">Category 1</li>
+            <li class="category-item">Category 2</li>
+            <li class="category-item">Category 3</li>
+        </ul>
+    </div>
+    <div class="products">
+        <div class="row d-flex align-items-center ">
+            <div class="col">
+                <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="ProductsDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <span class="card-text-Hot position-absolute">HOT</span>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="ProductsDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <span class="card-text-Hot position-absolute">HOT</span>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="ProductsDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <span class="card-text-sale position-absolute ">SALE</span>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="ProductsDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <span class="card-text-sale position-absolute ">SALE</span>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="packageMainDiv">
+        <div class="row w-100">
+            <div class="col w-100 px-0  d-flex align-items-center ">
+                <span class="rotated-heading">Explore The best selling Packages</span>
+                <div class="row package">
+                    <div class="col px-0  ms-2">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/ssfasfa.png" class="packageBig" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <span class="card-text position-absolute card-text-sale">PACKAGE A</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row ">
+                            <div class="col px-0 small-package-div1">
+                                <div class="image-container position-relative">
+                                    <img src="~/assets/img/33asdasdasd.png" class="packagesmall" alt="...">
+                                    <a asp-action="PackageDetails">
+                                        <div class="image-overlay">
+                                            <div class="overlay-content">
+                                                <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <span class="card-text position-absolute card-text-sale">PACKAGE B</span>
+                                </div>
+                            </div>
+                            <div class="col px-0 small-package-div1">
+                                <div class="image-container position-relative">
+                                    <img src="~/assets/img/white.png" class="packagesmall" alt="...">
+                                    <a asp-action="PackageDetails">
+                                        <div class="image-overlay">
+                                            <div class="overlay-content">
+                                                <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <span class="card-text position-absolute card-text-sale">PACKAGE D</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col px-0 small-package-div1">
+                                <div class="image-container position-relative">
+                                    <img src="~/assets/img/red.png" class="packagesmall" alt="...">
+                                    <a asp-action="PackageDetails">
+                                        <div class="image-overlay">
+                                            <div class="overlay-content">
+                                                <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <span class="card-text position-absolute card-text-sale">PACKAGE C</span>
+                                </div>
+                            </div>
+                            <div class="col px-0 small-package-div1">
+                                <div class="image-container position-relative">
+                                    <img src="~/assets/img/gamot.png" class="packagesmall" alt="...">
+                                    <a asp-action="PackageDetails">
+                                        <div class="image-overlay">
+                                            <div class="overlay-content">
+                                                <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <span class="card-text position-absolute card-text-sale">PACKAGE E</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aboutUS">
+        <div class="row">
+            <div class="col-6 aboutUSDivs ">
+                <h1>ABOUT US</h1>
+                <br />
+                <h4>PASSION TO HELP OTHERS</h4>
+                <p class="paragraph">Is the one key that draws the three of us TOGETHER. You too could be a part of our team which helps others and yourselves to lead a healthy and abundant life.</p>
+            </div>
+            <div class="col-6 aboutUSDivs">
+                <div class="row mb-2">
+                    <div class="col">
+                        <h4>MISSION</h4>
+                        <p class="paragraph">
+                            Ours is the passion to deliver good health and sustainable income to our Distributors and clienteles. Truly, being able to achieve dreams and aspirations of all who will join us with such passion is what we work hard for to achieve.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4>VISION</h4>
+                        <p class="paragraph">
+                            We are Supreme Herbs International Our aim is to be recognized globally , with the ability to offer and render our services to customers with utmost legitimate and outright earning opportunities. Customer satisfaction and trust is our commitment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="Executives">
+        <div class="best-sellers">
+            <h1>Executives</h1>
+        </div>
+        <div class="row mt-2">
+            <div class="col Executives-item d-flex justify-content-center align-items-center">
+                <div class="card" style="border-radius: 50%; border: none; background-color: none;">
+                    <img src="~/assets/executives/ex1.png" class="card-img-top Executives-img" alt="...">
+                    <div class="card-body text-center">
+                        <h4>ROGELIO ROBOSA BAÑARIA</h4>
+                        <span>Chairman</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col Executives-item d-flex justify-content-center align-items-center">
+                <div class="card" style="border-radius: 50%; border: none; background-color: #fff;">
+                    <img src="~/assets/executives/ex2.png" class="card-img-top Executives-img" alt="...">
+                    <div class="card-body text-center">
+                        <h4>ARMIE PACAYRA LIAD</h4>
+                        <span>Vice-Chairman/Treasurer</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col p Executives-item d-flex justify-content-center align-items-center">
+                <div class="card" style="border-radius: 50%; border: none; background-color: #fff;">
+                    <img src="~/assets/executives/ex3.png" class="card-img-top Executives-img" alt="...">
+                    <div class="card-body text-center">
+                        <h4>LUNA TEOPISTA MARI</h4>
+                        <span>BOD/Secretary</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact d-flex justify-content-center align-items-center ">
+        <div class="row container-contact">
+            <div class="col contact__left">
+                <div class="row contact-item">
+                    <div class="col ">
+                        <h2 style="color:#1A936F">GET IN TOUCH</h2>
+                        <hr style="width: 20%; height: 2px; background-color: #2E2E2E;" />
+                        <span><i class="fa fa-volume-control-phone" aria-hidden="true" style="color:#1A936F"></i> +639-1234-56789</span>
+                        <br />
+                        <br />
+                        <span><i class="fa fa-envelope" aria-hidden="true" style="color:#1A936F"></i> emailwebsite@email.com</span>
+                        <br />
+                        <br />
+                        <span><i class="fa fa-globe" aria-hidden="true" style="color:#1A936F"></i> 72-C Tramo St., Gahak, Kawit, Cavite</span>
+                    </div>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d61826.62709321364!2d120.83683255618568!3d14.417696606634859!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s72-C%20Tramo%20St.%2C%20Gahak%2C%20Kawit%2C%20Cavite!5e0!3m2!1sen!2sph!4v1685603208095!5m2!1sen!2sph" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+            <div class="col  mt-5">
+                <span>Full Name</span>
+                <input class="form-control" />
+                <br />
+                <span>Email</span>
+                <input class="form-control" />
+                <br />
+                <span>Contact #</span>
+                <input class="form-control" />
+                <br />
+                <textarea class="form-control" style="height: 10rem;" placeholder="Message"></textarea>
+                <br />
+                <button class="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer px-lg-5 py-sm-2 ">
+        <div class="row  d-flex justify-content-center align-items-center ">
+            <div class="col float-lg-start">
+                <span class="kv">©KvTechnology - 2023</span>
+            </div>
+            <div class="col d-flex justify-content-end align-items-end">
+                <button class="btn" id="scrollToTopBtn" style="border:none; background-color:#2E2E2E; color:#FFFF">Scroll to top  <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var hamburger = document.querySelector('.hamburger');
+        var menu = document.querySelector('.menu');
+        var closeButton = document.querySelector('.close-button');
+
+        hamburger.addEventListener('click', function () {
+            menu.classList.add('active');
+        });
+
+        closeButton.addEventListener('click', function () {
+            menu.classList.remove('active');
+        });
+    });
+
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    scrollToTopBtn.addEventListener('click', () => {
+        // Scroll to the top of the page
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Optional smooth scrolling animation
+        });
+    });
+</script>

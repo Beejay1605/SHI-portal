@@ -1,0 +1,48 @@
+﻿.main{
+
+    .Details{
+
+        display: flex;
+        width: 100%;
+       
+       
+        img{
+            width: 16%;
+            height:100%;
+            padding: 6px;
+        }
+        span{
+            float:center;
+            margin-left: 16px;
+            font: arial;
+            .dots{
+                background-color: forestgreen;
+                height: 15px;
+                width: 15px;
+                border-radius: 50%;
+                display: inline-block;
+                margin-left: 2px;
+                margin-bottom: 0px;
+            }
+        }
+    }
+    .lbl-name-ident{
+        .lbl-name{
+            font-size: 30px;
+            font-family: arial;
+            color:#999;
+            padding:24px;
+            padding-top:0;
+            margin-bottom: 0px;
+        }
+    }
+    .age-sex{
+        
+        .lbl{
+            padding:6px;
+            font-family: arial;
+            size:12px;
+        }
+      
+    }
+}

@@ -1,0 +1,19 @@
+.Inventory-main .card-body {
+  box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -webkit-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -moz-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  padding: 12px;
+  background-color: #ffffff;
+}
+.Inventory-main .card-body table tbody td button {
+  display: flex;
+  padding: 4px 6px;
+}
+.Inventory-main .card-body table tbody td button span {
+  margin-right: 6px;
+}
+.Inventory-main .card-body table tbody td .btn-dark {
+  margin-right: 8px;
+}
+
+/*# sourceMappingURL=Index.css.map */

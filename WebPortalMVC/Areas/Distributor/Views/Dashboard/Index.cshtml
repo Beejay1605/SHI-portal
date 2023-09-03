@@ -1,0 +1,262 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string fullName = "Lenard Palce";
+    ViewData["Title"] = "Dashboard" ;
+    Layout = "~/Views/Shared/_LayoutDistributors.cshtml";
+
+}
+
+<link href="~/styles/operations/Dashboard/Index.css" rel="stylesheet" type="text/css"/>
+<div class="">
+<!-- Card stats -->
+<div class="row g-6 mb-8 pb-2">
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Total Earnings</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-sharp" style="font-size:30px; color: #1A936F">
+                                attach_money
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Balance</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-sharp" style="font-size:30px; color: #1A936F">
+                                account_balance_wallet
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Cash-out Request</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-sharp" style="font-size:30px; color: #1A936F">
+                                payments
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row  mt-xl-2 main-div">
+<div class="col-xl-8 col-sm-6 col-12 " id="div-right">
+    <div class="main-card mb-2 card">
+        <div class="card-header">
+            Pay-out Transactions
+        </div>
+        <div class="table-responsive" style="overflow-x: auto;height: 360px;">
+            <table class="align-middle mb-0 table table-borderless  table-hover ">
+                <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th class="text-center">Amount</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="payout-trans">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="d-block text-center card-footer m-0">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+    <div class="main-card card">
+        <div class="card-header">
+            Purchase History
+        </div>
+        <div class="table-responsive"  style="height: 300px;">
+            <table class="align-middle mb-0 table table-borderless  table-hover" style="overflow-y: scroll;">
+                <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th >Product</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Total</th>
+                </tr>
+                </thead>
+                <tbody id="purchase-hist">
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="d-block text-center card-footer m-0">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+</div>
+<div class="col-xl-4 col-sm-6 col-12 ">
+    <div class="main-card  card" id="div-left">
+        <div class="card-header">
+            Transaction History
+        </div>
+        <div>
+            <table class="align-middle mb-0 table table-borderless table-hover p-5">
+                <thead>
+                <tr>
+                    <th class="ps-4">Transaction Type</th>
+                    <th >Date</th>
+                </tr>
+                </thead>
+                <tbody class="table-body-padding" id="transact-hist">
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-block text-center card-footer mt-auto">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        authenticateDistributorPage(() => {
+            dashboardData();
+        });
+        BreadCrumbData([{
+            title: "Welcome Back!!",
+        }]);
+    
+        // Custom styles for breadcrumb
+         $(".breadcrumb").css("margin", "0");
+         $(".breadcrumb").css("padding", "0"); 
+         $(".breadcrumb").css("position", "relative");
+         $(".breadcrumb").css("top", "10px");
+         $(".breadcrumb-item").css("font-size", "15px");
+         $(".breadcrumb").css("background-color", "transparent"); 
+    });
+    $(document).ready(function() {
+        // Calculate the height of col-xl-8
+        var col8Height = $("#div-right").outerHeight();
+        // Set the height of col-xl-4 to match col-xl-8
+        $("#div-left").height(col8Height);
+    });
+    
+    
+    function dashboardData(){
+        SHILoadingStart();
+        
+        $.ajax({
+            url: "/Distributor" + "@Url.Action("DashboardData","Dashboard")",
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                console.log(data);
+                const { payout_history, purchase_history, transaction_history} = data;
+                $("#payout-trans").html(``);
+                $("#transact-hist").html(``);
+                $("#purchase-hist").html(``);
+                
+                payout_history?.forEach(ph => {
+                    $("#payout-trans").append(`
+                        <tr>
+                            <td>
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper ">
+                                        <div class="widget-content-left flex2 ms-3">
+                                            <div class="widget-heading">${ph.created_dt.substring(0, 10)}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">₱ ${ph.amount?.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}</td>
+                            <td class="text-center">
+                                PAID
+                            </td>
+                            <td class="text-center">
+                                PAID
+                            </td>
+                        </tr>
+                    `);
+                });
+                
+                transaction_history?.forEach(th => {
+                    $("#transact-hist").html(`
+                        <tr>
+                            <td class="ps-4">${th.type}</td>
+                            <td>${th.created_dt}</td>
+                        </tr>
+                    `);
+                });
+                
+                purchase_history?.forEach(prh => {
+                    $("#purchase-hist").html(`
+                        <tr>
+                            <td>
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper ">
+                                        <div class="widget-content-left flex2 ms-3">
+                                            <div class="widget-heading">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td >${prh.product_details.p_name}</td>
+                            <td class="text-center">${prh.quantity}</td>
+                            <td class="text-center">₱ ${(prh.quantity * prh.unit_price)?.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}</td>
+                        </tr>
+                    `);
+                });
+                
+                SHILoadingStop(); 
+            },
+            error: function (response){ 
+                const { status, responseText } = response;
+                if (status === 401){
+                   refreshToken(() => {
+                       getFinancials();
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+        }); 
+    }
+</script>

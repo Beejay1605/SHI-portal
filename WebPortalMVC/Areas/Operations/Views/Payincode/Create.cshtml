@@ -1,0 +1,176 @@
+﻿@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Pay-in Codes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string form_group = "generate-form";
+}
+
+
+<link href="~/styles/operations/payin-codes/Generate.css" rel="stylesheet" type="text/css" />
+
+<div class="generate-payin-codes">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-7">
+                <div style="width: 100%;display: flex">
+                    @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                        id = "reference-no",
+                                        group = form_group,
+                                        placeholder = "Reference Number",
+                                        type = "text",
+                                        container_style= "width: 320px;"
+                    })  
+                </div> 
+                <button class="btn btn-success" id="btn-generate-code">Generate Pay-in Code</button> 
+            </div> 
+            <div class="col-12"> 
+                <button class="btn btn-primary btn-download-all" id="btn-download-all"><p><span class="material-symbols-sharp">cloud_download</span>Download All</p></button>
+                <div class="" id="generated-container">
+                    <ul class="generated-list" id="generated-code-list" style="width: 100%;height: auto;margin-top: 24px;list-style-type: none;padding: 0px;">
+                    </ul>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <form action="javascript:void(0);" id="form-generate">
+        @Html.AntiForgeryToken()
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        authenticateOperationsPage(function (){});
+        BreadCrumbData([{
+            title: "Pay-in Codes",
+            url: "@(Url.Content("~/Operations/Payin-codes/"))"
+        }, {
+            title: "Create",
+            url: "@(Url.Content("~/Operations/Payin-codes/Create"))"
+        }])
+    });
+
+    $("#btn-generate-code").on("click", function(){
+        showDialogBoxMultiButtons({
+            title: "Generate Pay-In Code",
+            body: `Are you sure you want to genereate pay-in code?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="generatePayinExecute()">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+ 
+    
+    let htmlPdfContent = '';
+    function generatePayinExecute(){
+        closeDialogBoxMultiButtons();
+        
+        SHILoadingStart();
+        var form = $('#form-generate');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData();
+        form_Data.append("__RequestVerificationToken", token); 
+        form_Data.append("ReferenceNumber", $("#reference-no").val());
+
+        $.ajax({
+            url: "@Url.Content("~/Operations/Payin-code/Generate")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                showDialog(() => {
+                    console.log(response);
+                    $("#generated-code-list").html("");
+
+                    response?.forEach(cd => { 
+                        const luxonDateTime = luxon.DateTime.fromFormat(cd?.expiration_date?.substring(0, 10), "yyyy-MM-dd");
+                        const code = `${cd?.payin_code?.substring(0, 4)}-${cd?.payin_code?.substring(4, 8)}-${cd?.payin_code?.substring(8, 12)}-${cd?.payin_code?.substring(12, 16)}`;
+                        const image = `data:image/jpg;base64,${cd?.qr_code_base64}`;
+
+                        let pdfHtmlTemp = `<li class="border" style="width: 100%;margin-bottom: 8px;padding: 12px;position: relative;">
+                                            <img class="double-triangle" src="/assets/design/double-triangle-bg.svg" alt="" style="left: 0px;position: absolute;">
+                                            <div class="inner-content" style="width: 100%;display: flex;min-height: 320px;">
+                                                <img class="shi-logo" src="/assets/logo/onlinestorelogo.svg" alt="" style="height: 200px;object-fit: contain;object-position: center;margin-right: 16px;margin-top: auto;margin-bottom: auto;">
+                                                    <div class="code-content" style="width: 100%;margin-top: auto;margin-bottom: auto;padding-left: 16px;padding-right: 24px;text-align: center;">
+                                                    <h4 style="font-family: 'Montserrat';font-style: normal;font-weight: 600;font-size: 36px;line-height: 44px;letter-spacing: 0.02em;color: #1A936F;">${code}</h4>
+                                                    <span>Expiration Date: ${luxonDateTime.toFormat("MMMM dd, yyyy")}</span>
+                                                    <p>Dear user, please be aware that the QR code you have has a validity period. This means that it will only be valid for a certain period of time after which it will expire. Please make sure to use the code within the validity period to avoid any inconvenience. Thank you for using our app!</p>
+                                                </div>
+                                                <img class="shi-qrcode" src="${image}" alt="" style="object-fit: contain;object-position: center;width: 260px;height: 260px;">
+                                            </div>
+                                        </li>`;
+
+                        $("#generated-code-list").append(`
+                            <li class="border">
+                                <img class="double-triangle" src="/assets/design/double-triangle-bg.svg" alt="">
+                                <div class="inner-content">
+                                    <img class="shi-logo" src="/assets/logo/onlinestorelogo.svg" alt="">
+                                    <div class="code-content">
+                                        <h4>${code}</h4>
+                                        <span>Expiration Date: ${luxonDateTime.toFormat("MMMM dd, yyyy")}</span>
+                                        <p>Dear user, please be aware that the QR code you have has a validity period. This means that it will only be valid for a certain period of time after which it will expire. Please make sure to use the code within the validity period to avoid any inconvenience. Thank you for using our app!</p>
+                                    </div>
+                                    <img class="shi-qrcode" src="${image}" alt="">
+                                </div>
+                            </li>
+                        `);
+
+                        htmlPdfContent += pdfHtmlTemp;
+
+                    });
+                    
+                }, "SUCCESS", "Create Pay-in Code", "Successfully registered new distributor");
+            },
+            error: function (response) {
+                SHILoadingStop();
+                console.log(response);
+                const { responseJSON, status , responseText} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        generatePayinExecute();
+                    });
+                }else if (status === 400){
+                    showDialog(() => {
+                        
+                    }, "DANGER", "Pay-in Code Validation", responseText);
+                }else{
+                    SHILoadingStop();    
+                }
+            }
+        });
+    }
+
+    function generatePDFDownload(fileName, htmlContent){
+        const element = htmlContent;
+        html2pdf()
+            .set({
+                filename: `${fileName}.pdf`,
+                margin: [10, 10, 10, 10],
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, logging: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            })
+            .from(element)
+            .save(); 
+    }
+
+    $("#btn-download-all").on('click', function(){
+        if (htmlPdfContent === ''){
+            showDialog(() => {
+                                
+            }, "DANGER", "Pay-in Code Validation", "Please Generate Code first");
+            return;
+        }
+        generatePDFDownload('Generated-Code', htmlPdfContent);
+    });
+
+
+
+
+</script>

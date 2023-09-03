@@ -1,0 +1,96 @@
+.registration-page {
+  width: 100%;
+}
+.registration-page .header {
+  background-color: #114B5F;
+  border-radius: 5px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.registration-page .header h4 {
+  margin-bottom: 0px;
+  color: #fff;
+  font-size: 18px;
+}
+.registration-page .member-image {
+  border: 1px solid #1A936F;
+  width: 102px;
+  height: 102px;
+  padding: 1px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+.registration-page .member-image img {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  border-radius: 5px;
+  padding: 8px;
+}
+.registration-page .member-image .user-profile-action {
+  margin-top: 6px;
+  display: flex;
+}
+.registration-page .member-image .user-profile-action button {
+  padding: 4px 8px;
+  width: 50%;
+  display: flex;
+}
+.registration-page .member-image .user-profile-action button span {
+  margin: auto;
+}
+.registration-page .member-image .user-profile-action button:first-child {
+  margin-right: 4px;
+}
+.registration-page .member-image .user-profile-action button:last-child {
+  margin-left: 4px;
+}
+.registration-page .form-start {
+  width: 100%;
+  padding-left: 12px;
+}
+.registration-page .form-start .row-group {
+  width: 100%;
+  padding-top: 12px;
+  display: flex;
+}
+.registration-page .form-start .row-group .floating-input:first-child {
+  margin-right: 12px;
+}
+.registration-page .form-start .row-group .floating-input:last-child {
+  margin-right: 12px;
+}
+.registration-page .info-div-2 {
+  width: 100%;
+  margin-top: 16px;
+}
+.registration-page .info-div-2 .floating-input {
+  margin-bottom: 16px;
+}
+.registration-page .form-registration-info {
+  padding: 12px;
+}
+.registration-page .form-registration-info .chk-single {
+  margin-left: 12px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+}
+.registration-page .form-fields .icon {
+  font-size: 13px;
+}
+
+.camera-content {
+  width: 100%;
+  height: auto;
+}
+.camera-content #webcam {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1/1 !important;
+}/*# sourceMappingURL=Registration.css.map */

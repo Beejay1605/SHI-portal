@@ -1,0 +1,87 @@
+.DistributorListPage {
+
+
+    .btn-register{
+        button{
+            height: 60px;
+            padding:4px 8px; 
+            font-size:15px;
+            margin-top:auto;
+            margin-bottom: auto;
+            span{
+                margin:auto;
+                font-size:15px;
+            }
+        }
+        button:first-child{
+            margin-right:0px;
+        }
+        button:last-child{
+            margin-left:4px;
+        }
+    }
+    
+    .table {
+        
+        
+        .table-header {
+            
+            th{
+                text-align: center;
+            }
+        }
+
+        .table-body {
+            tr{
+                border-bottom:1px solid #919191;
+            }
+            tr:first-child{
+                border-top:1px solid #919191;
+            }
+        
+            .table-row{
+                
+                .td {
+                    text-align: center;
+                    padding:8px;
+                    margin-top:auto;
+                    margin-bottom: auto;
+
+                    button , a{
+                        width: 40px;
+                        height: 34px !important; 
+                        margin-top: auto;
+                        margin-bottom: auto;
+                        padding-top:6px;
+                        margin-right: 6px;
+                        span{
+                            margin:auto;
+                            font-size:12px; 
+                        }
+                    }
+                    a:first-child{
+                        margin-right:4px;
+                    }
+                    button:last-child{
+                        margin-left:4px;
+                    }
+
+                    .lbl-bottom{
+                        font-size: smaller;
+                    }
+                    .img-style {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 100%;
+                       
+                        
+                    }
+                }
+
+                .td:last-child{
+                    display: flex;
+                }
+            }
+        }
+    }
+}

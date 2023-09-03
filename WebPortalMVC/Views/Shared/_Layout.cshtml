@@ -1,0 +1,189 @@
+﻿@using Manager.Commons.Const
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>[SHI] - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/Layout.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/WebPortalMVC.styles.css" asp-append-version="true"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Asap:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="~/lib/jquery/jquery-3.7.0.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/luxon/luxon_3.3.0_luxon.min.js"></script>
+    <link rel="stylesheet" href="~/css/ProjectElements.css"/>
+    <link rel="stylesheet" href="~/css/components/InputComponent.css"/>
+    <link rel="stylesheet" href="~/css/components/SelectComponent.css"/>
+
+</head>
+<body>
+
+<section class="side-bar" style="background: url('/assets/design/sidebar_bg.png');
+        background-position: center;
+        background-size: cover;">
+    <div class="logo">
+        <img src="~/assets/logo/logo_white.svg" alt="">
+    </div>
+    <ul>
+        <li>
+            <a href="@(Url.Content("~/Operations/Dashboard/Index"))" class="@(ViewData["SidebarLocation"] == "Dashboard" ? "active" : "")"><span class="material-symbols-sharp">bar_chart_4_bars</span>Dashboard</a>
+        </li>
+        <li>
+            <a href="@(Url.Content("~/Operations/Products/Index"))" class="@(ViewData["SidebarLocation"] == "Products" ? "active" : "")"><span class="material-symbols-sharp">shopping_bag</span> Products</a>
+        </li>
+        <li>
+            <a href="@("/Operations" + Url.Action("Index", "Distributors"))" class="@(ViewData["SidebarLocation"] == "Distributors" ? "active" : "")"><span class="material-symbols-sharp">diversity_3</span> Distributors</a>
+        </li>
+        <li>
+            <a href="@(Url.Content("~/Operations/Payin-codes/"))" class="@(ViewData["SidebarLocation"] == "Pay-in Codes" ? "active" : "")"><span class="material-symbols-sharp">qr_code_2</span> Pay-in Codes</a>
+        </li>
+        <li>
+            <a href="@("/Operations" + Url.Action("Index", "POS"))" class="@(ViewData["SidebarLocation"] == "POS" ? "active" : "")"><span class="material-symbols-sharp">point_of_sale</span> Point of Sale</a>
+        </li>
+        <li>
+            <a href="@("/Operations" + Url.Action("Index", "Inventory"))" class="@(ViewData["SidebarLocation"] == "Inventory" ? "active" : "")"><span class="material-symbols-sharp">inventory</span> Inventory</a>
+        </li>
+        <li>
+            <a href="@("/Operations" + Url.Action("Index", "Financial"))" class="@(ViewData["SidebarLocation"] == "Financial" ? "active" : "")"><span class="material-symbols-sharp">monetization_on</span> Financials</a>
+        </li>
+        <li>
+            <a type="button" href="#" id="btn-logout"><span class="material-symbols-sharp">logout</span> Logout</a>
+        </li>
+    </ul>
+</section>
+
+@await Html.PartialAsync("~/Views/Shared/components/_Loading.cshtml")
+@await Html.PartialAsync("~/Views/Shared/components/_Dialogs.cshtml")
+@await Html.PartialAsync("~/Views/Shared/components/ConfirmDialog.cshtml")
+<main role="main" class="pb-3">
+    <div class="top-bar">
+        <div style="width: auto;">
+            <h3>@ViewData["Title"]</h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" id="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data</li>*@
+                </ol>
+            </nav>
+        </div>
+        <div class="right-menu">
+            @* <div class="button-notif"> *@
+            @*     <span class="material-symbols-sharp">notifications</span> *@
+            @* </div> *@
+            <div class="profile-btn" style="">
+                <div class="name-det">
+                    <label id="user-fullname" style="margin-bottom: 0px;font-size: 16px;font-weight: 500;">
+                        
+                    </label>
+                    <br/>
+                    <span>Administrator</span>
+                </div> 
+                <div class="user-dp">
+                    <img src="~/assets/img/userimg.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+      
+        @RenderBody()
+    </div>
+</main>
+@await Html.PartialAsync("~/Views/Shared/components/_Authentication.cshtml");
+<script>
+        $(document).ready(function (){
+            getUserClaims();
+        })
+
+        function BreadCrumbData(obj) {
+            $("#breadcrumb").html("");
+            obj.forEach((o, idx) => {
+                if(obj.length -1 === idx){
+                    $("#breadcrumb").append(`<li class="breadcrumb-item active" aria-current="page">${o?.title}</li>`);
+                } else {
+                    $("#breadcrumb").append(`<li class="breadcrumb-item"><a href="${o?.url}">${o?.title}</a></li>`);
+                }
+            });
+        }
+
+        $(document).on('focusout', '[category="input-number"]', (event) => {
+            inputNumberFormatter(event);
+        });
+        
+        $(document).on('change', '[category="input-number"]', (event) => {
+            inputNumberFormatter(event);
+        });
+        
+        
+        function inputNumberFormatter(event){
+            const value_non_str = $(event.target).val().replaceAll(",", "").replace("₱","").replace(/[^\d.]/g, '');
+            let result = "";
+            if(value_non_str === "" || value_non_str === NaN){
+                $(event.target).val("₱ 0.00");
+                return;
+            }
+            if (/^-?\d*\.?\d+$/.test(value_non_str)) {
+                result = formatNumber(parseFloat(value_non_str));
+                $(event.target).val("₱ " + result);
+            }else{
+                result = removeNonNumeric(value_non_str);
+                result = formatNumber(parseFloat(value_non_str));
+                $(event.target).val("₱ " + result);
+            } 
+        }
+
+        function formatNumber(number) {
+            const fixedNumber = number.toFixed(2);
+            return fixedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function removeNonNumeric(input) {
+            return input.split('').filter(char => !isNaN(char)).join('');
+        }
+        
+        $("#btn-logout").on('click', function (){
+            localStorage.removeItem("SXSTKN");
+            window.location.href = "@Url.Action("Index","Login")";
+        })
+         
+        
+        function getUserClaims(){
+            const token = localStorage.getItem("@SecurityConst.TOKEN_KEY");
+            
+            var form_Data = new FormData(); 
+            form_Data.append("token", token); 
+            SHILoadingStart();
+            $.ajax({
+                url: "@Url.Action("TokenDecodeOperations","Login")",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: form_Data,
+                success: function (response) {
+                    SHILoadingStop(); 
+                    const { firstname, lastname } = response; 
+                    $("#user-fullname").text(`${firstname} ${lastname}`);
+                },
+                error: function (response) { 
+                    SHILoadingStop();
+                }
+            });
+        }
+      
+    </script>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

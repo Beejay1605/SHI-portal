@@ -1,0 +1,106 @@
+﻿@using Domain.Models.Components;
+
+@{
+    ViewData["Title"] = "Pay-in Codes";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<link href="~/styles/operations/payin-codes/Index.css" rel="stylesheet" type="text/css" />
+
+<div class="payin-code-page">
+    <div class="action-row">
+        @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+            id = "txt-search",
+            group = "",
+            placeholder = "Search",
+            container_style = "width: 320px;"
+        })
+
+        <a class="btn btn-primary" href="@Url.Content("~/Operations/Payin-codes/Create")">
+            <span class="material-symbols-sharp">add</span>  <span>Create Pay-in Code</span>
+        </a>
+    </div>
+    <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>OR NUMBER</th>
+        <th>Quantity</th>
+        <th>OWNERS</th>
+        <th>EXPIRATION</th> 
+      </tr>
+    </thead>
+    <tbody id="table-payins">
+       
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        //WaytoAuthenticatePage
+        authenticateOperationsPage(function (){
+            loadPayinCodes(); //callback
+        });
+        BreadCrumbData([{
+            title: "Pay-in Codes",
+            url: "@(Url.Content("~/Operations/Payin-codes/"))"
+        }, {
+            title: "List",
+            url: "@(Url.Content("~/Operations/Payin-codes/"))"
+        }])
+    });
+
+    
+    function loadPayinCodes(){
+        SHILoadingStart();
+        $("#table-payins").html("");
+        $.ajax({
+            url: "/Operations" + `@Url.Action("PayinCodesList","Payincode")?search=${$("#txt-search").val()}` ,
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop(); 
+                const { payins } = response;
+                console.log(payins);
+                payins.forEach(obj => {
+                    $("#table-payins").append(`
+                        <tr>
+                            <td>${obj.tran_ident}</td>
+                            <td>${obj.code}</td>
+                            <td>${obj.distributorsDetails.first_name} ${obj.distributorsDetails.last_name} (${obj.distributorsDetails.ident})</td> 
+                            <td>${obj.expiration_date.substring(0,10)}</td>  
+                        </tr>
+                    `); 
+                })
+            },
+            error: function (response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        loadPayinCodes();
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+
+            }
+        });
+    }
+    
+    
+    $("#txt-search").on('change', function () {
+        
+        if ($(this).val()){
+            loadPayinCodes();
+        }
+    });
+    
+    $("#txt-search").on('keyup', function () {
+        if (!$(this).val()){
+            loadPayinCodes();
+        }
+    });
+</script>

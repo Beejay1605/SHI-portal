@@ -1,0 +1,125 @@
+@using Domain.Models.Components;
+@using Manager.Commons.Const
+@{
+    ViewData["Title"] = "User Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/styles/public/login.css">
+<div class="login-page">
+    <section class="cover-section" style="background: url('/assets/design/login_bg.jfif');">
+        <img src="~/assets/logo/logo_white.svg" alt="">
+    </section> 
+    <section class="login-form">
+        <div class="form-wrapper">
+            <img src="~/assets/logo/logo_gold.svg" alt="">
+            <form action="javascript:void(0);" id="form-login">
+                @Html.AntiForgeryToken()
+                <div class="form-containers" id="login-container">
+                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                        id = "txt-username",
+                        group = "login-form",
+                        placeholder = "Username"
+                    })
+                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                        id = "txt-password",
+                        group = "login-form",
+                        placeholder = "Password",
+                        type = "password"
+                    })
+                    <a href="#forgotPassword" id="forgotPassword">Forgot Password?</a>
+                    <button type="submit" class="btn btn-primary" id="btn-login">LOGIN</button>
+                </div>
+            </form>
+            <div class="form-containers" id="login-msg-container" style="display: none;">
+                <h4>Please contact the administrator to assist you to reset your credentials.</h4>
+                <br/>
+                <button class="btn btn-primary" id="btn-back-login">BACK TO LOGIN</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    let isAlreadySubmitted = false;
+    $("#form-login").on("submit", async () =>{
+        isAlreadySubmitted = true;
+         
+        var form = $('#form-login');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData();
+        form_Data.append("__RequestVerificationToken", token);
+        form_Data.append("username", $("#txt-username").val());
+        form_Data.append("password", $("#txt-password").val());
+
+         
+        ResetForm();
+        SHILoadingStart();
+        $.ajax({
+            url: "@Url.Action("LoginRequest","Login")",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: form_Data,
+            success: function (response) {
+                SHILoadingStop(); 
+                const { token, redirection } = response; 
+                localStorage.setItem("@SecurityConst.TOKEN_KEY", token);
+                window.location.href = redirection;
+            },
+            error: function (response) { 
+                SHILoadingStop();
+                const { responseJSON, status, responseText } = response; 
+                if (status === 400) { 
+                    showDialog(() => {
+                         
+                    }, "DANGER", "User Authentication", "Username and password does'nt exist");
+                }else if(status == 403){ 
+                    responseJSON.forEach(obj => {
+                        $(`#txt-${obj.property_name}`).addClass("is-invalid");
+                        $(`#txt-${obj.property_name}_text-error`).text(obj.message);
+                    });
+                }
+            }
+        });
+
+    });
+
+
+    function ResetForm(){
+        //$('input[group="login-form"]').val("");
+        $('input[group="login-form"]').removeClass("is-invalid");
+        $(`span[group="login-form"]`).text("")
+        //$(`span[group="login-form_text-error"]`).each((e) => {
+        //    $(this).text("") 
+        //})
+    }
+
+    $('input[group="login-form"]').on('keyup', (e) => { 
+        var this_val = e.target.value;
+        if(this_val){
+            $(`#${e.target.id}`).removeClass('is-invalid');
+            $(`#${e.target.id}_text-error`).text('');
+        }else{
+            if(!isAlreadySubmitted){
+                $(`#${e.target.id}`).addClass('is-invalid');
+                $(`#${e.target.id}_text-error`).text('');
+            }
+        }
+    });
+
+    $("#btn-back-login").on('click', (e) => {
+        $("#login-container").show();
+        $("#login-msg-container").hide();
+    });
+
+    
+    $("#forgotPassword").on('click', (e) => {
+        $("#login-container").hide();
+        $("#login-msg-container").show();
+    });
+
+
+
+
+</script>

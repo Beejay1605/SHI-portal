@@ -1,0 +1,175 @@
+.generate-payin-codes {
+  width: 100%;
+  height: auto;
+}
+.generate-payin-codes .table-container {
+  width: 100%;
+  max-height: 320px;
+  padding-top: 24px;
+  overflow-y: auto;
+}
+.generate-payin-codes .table-container td {
+  cursor: pointer;
+}
+.generate-payin-codes .distributor-profile {
+  background-color: #f1f1f1;
+  padding: 16px 24px !important;
+}
+.generate-payin-codes .distributor-profile img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 12px;
+}
+.generate-payin-codes .distributor-profile h5 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: #2E2E2E;
+  margin-bottom: 0px;
+}
+.generate-payin-codes .distributor-profile small {
+  /* SHI Desktop Sub Header 5 */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: #999999;
+}
+.generate-payin-codes .distributor-profile ul {
+  list-style-type: none;
+  padding: 0px !important;
+}
+.generate-payin-codes .distributor-profile ul li {
+  margin-bottom: 8px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: #999999;
+}
+.generate-payin-codes .distributor-profile ul li b {
+  color: #2E2E2E;
+  margin-right: 6px;
+}
+.generate-payin-codes .btn-download-all {
+  min-width: 220px;
+  margin-left: auto;
+  display: flex;
+  height: 46px;
+  margin-top: 24px;
+}
+.generate-payin-codes .btn-download-all p {
+  display: flex;
+  margin: auto;
+}
+.generate-payin-codes .btn-download-all span {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 6px;
+}
+.generate-payin-codes .generated-list {
+  width: 100%;
+  height: auto;
+  margin-top: 24px;
+  list-style-type: none;
+  padding: 0px;
+}
+.generate-payin-codes .generated-list li {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 12px;
+  position: relative;
+}
+.generate-payin-codes .generated-list li .double-triangle {
+  left: 0px;
+  position: absolute;
+}
+.generate-payin-codes .generated-list li .inner-content {
+  width: 100%;
+  display: flex;
+  min-height: 320px;
+}
+.generate-payin-codes .generated-list li .inner-content .shi-logo {
+  height: 200px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -o-object-position: center;
+     object-position: center;
+  margin-right: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.generate-payin-codes .generated-list li .inner-content .shi-qrcode {
+  -o-object-fit: contain;
+     object-fit: contain;
+  -o-object-position: center;
+     object-position: center;
+  width: 260px;
+}
+.generate-payin-codes .generated-list li .inner-content .code-content {
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 16px;
+  padding-right: 24px;
+  text-align: center;
+}
+.generate-payin-codes .generated-list li .inner-content .code-content h4 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: 0.02em;
+  color: #1A936F;
+}
+.generate-payin-codes .generated-list li .inner-content .code-content span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 15px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #2E2E2E;
+}
+.generate-payin-codes .generated-list li .inner-content .code-content p {
+  font-family: "Asap";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  text-align: center;
+  letter-spacing: -0.03em;
+  color: #2E2E2E;
+  margin-top: 16px;
+}
+.generate-payin-codes .generated-list li button {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: flex;
+  text-align: center;
+  border-radius: 0px;
+}
+.generate-payin-codes .generated-list li button p {
+  margin: auto;
+  display: flex;
+}
+.generate-payin-codes .generated-list li button p span {
+  margin-right: 6px;
+}/*# sourceMappingURL=Generate.css.map */

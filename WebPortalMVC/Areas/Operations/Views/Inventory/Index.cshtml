@@ -1,0 +1,148 @@
+﻿@using Domain.Models.Components;
+
+@{
+    ViewData["Title"] = "Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/styles/operations/Inventory/Index.css" rel="stylesheet" type="text/css" />  
+
+<div class="Inventory-main mt-5">
+    <div class="row main-header justify-content-end">
+        <div class="col-3 mb-3">
+            @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "txt-search",
+                group = "",
+                placeholder = "Search"
+            })
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive tableFixHead" style="max-height:780px;">
+            <table class="table p-sm-4 table-bordered table-striped">
+                <thead style="font-size: 15px; background-color:#FFFFFF; ">
+                <tr>
+                    <th style=" text-align:center">Product Id</th>
+                    <th>Name</th>
+                    <th>No. of Stock</th>
+                    <th>SRP</th> 
+                    <th>DISTRIBUTOR PRICE</th> 
+                    <th>NON MEMBER DISC. PRICE</th> 
+                    <th>TOTAL PAYOUT</th> 
+                    <th>PROFIT</th>
+                    <th>Actions</th> 
+                </tr>
+                </thead> 
+                <tbody id="table-body"> 
+                </tbody>
+            </table>
+        </div> 
+    </div>
+</div>
+
+
+<script>
+    
+    $(document).ready(() => {
+        BreadCrumbData([{
+            title: "Inventory",
+            url: "/Operations" + "@Url.Action("Index","Inventory")"
+        }, {
+            title: "List",
+            url: "/Operations" + "@Url.Action("Index","Inventory")"
+        }])
+        authenticateOperationsPage(() => {
+            loadInventory();
+        });
+    });
+    
+    $("#txt-search").on('change', () => { 
+        if($("#txt-search").val() !== ""){
+            loadInventory();
+        }
+    })
+    
+    $("#txt-search").on('keyup', () => {
+        if($("#txt-search").val() === ""){
+            loadInventory();
+        }
+    })
+    
+    function loadInventory(){
+        SHILoadingStart();
+        const search_value = $("#txt-search").val(); 
+        
+        $.ajax({
+            url: "/Operations" + `@Url.Action("GetProductInventory","Inventory")?search=` + search_value,
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                console.log(response); 
+                $("#table-body").html("");
+                
+                response.forEach(obj => {
+                    const {product_details} = obj;
+                   $("#table-body").append(`<tr>
+                                <td style=" text-align:center">${product_details?.p_code}</td>
+                                <td>${product_details?.p_name}</td> 
+                                <td>${obj.total_stocks}</td>
+                                <td>₱ ${numberFormatter(product_details?.p_price ?? 0)}</td>
+                                <td>₱ ${numberFormatter(product_details?.membership_price ?? 0)}</td>
+                                <td>₱ ${numberFormatter(product_details?.non_membership_discounted_price ?? 0)}</td>
+                                <td>₱ ${numberFormatter(product_details?.total_payout ?? 0)}</td>
+                                <td>₱ ${numberFormatter(product_details?.profit ?? 0)}</td>
+                                <td class="align-content-center">
+                                    <div style="display: flex; flex-direction: row;">
+                                        <button class="btn btn-dark" name="btn-add-stock" code="${product_details?.p_code}">
+                                            <span class="material-symbols-sharp">monitor_weight_gain</span> Add Stock
+                                        </button>
+                                        <button class="btn btn-danger" name="btn-remove-stock" code="${product_details?.p_code}">
+                                            <span class="material-symbols-sharp">monitor_weight_loss</span> Remove Stock
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>`) 
+                });
+                
+            },
+            error: function (response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        DistributorsData();
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        });
+    }
+    
+    
+    $(document).on('click','button[name="btn-add-stock"]', (event) => {
+       window.location.href = ("/Operations" + "@Url.Action("Create","Inventory")" + "?code=" + $(event.target).attr("code"));
+    });
+    
+    
+    $(document).on('click','button[name="btn-remove-stock"]', (event) => {
+       window.location.href = ("/Operations" + "@Url.Action("RemoveStocks","Inventory")" + "?code=" + $(event.target).attr("code"));
+    });
+    
+    function numberFormatter(price){
+        
+        const formattedNumber = price.toLocaleString('en-US', {
+                               style: 'decimal',
+                               minimumFractionDigits: 2,
+                               maximumFractionDigits: 2,
+                             });
+        
+        return formattedNumber;
+    }
+</script>
+
+

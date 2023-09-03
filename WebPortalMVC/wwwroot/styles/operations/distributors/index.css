@@ -1,0 +1,60 @@
+.DistributorListPage .btn-register button {
+  height: 60px;
+  padding: 4px 8px;
+  font-size: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.DistributorListPage .btn-register button span {
+  margin: auto;
+  font-size: 15px;
+}
+.DistributorListPage .btn-register button:first-child {
+  margin-right: 0px;
+}
+.DistributorListPage .btn-register button:last-child {
+  margin-left: 4px;
+}
+.DistributorListPage .table .table-header th {
+  text-align: center;
+}
+.DistributorListPage .table .table-body tr {
+  border-bottom: 1px solid #919191;
+}
+.DistributorListPage .table .table-body tr:first-child {
+  border-top: 1px solid #919191;
+}
+.DistributorListPage .table .table-body .table-row .td {
+  text-align: center;
+  padding: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.DistributorListPage .table .table-body .table-row .td button, .DistributorListPage .table .table-body .table-row .td a {
+  width: 40px;
+  height: 34px !important;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-top: 6px;
+}
+.DistributorListPage .table .table-body .table-row .td button span, .DistributorListPage .table .table-body .table-row .td a span {
+  margin: auto;
+  font-size: 12px;
+}
+.DistributorListPage .table .table-body .table-row .td a:first-child {
+  margin-right: 4px;
+}
+.DistributorListPage .table .table-body .table-row .td button:last-child {
+  margin-left: 4px;
+}
+.DistributorListPage .table .table-body .table-row .td .lbl-bottom {
+  font-size: smaller;
+}
+.DistributorListPage .table .table-body .table-row .td .img-style {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+}
+.DistributorListPage .table .table-body .table-row .td:last-child {
+  display: flex;
+}/*# sourceMappingURL=index.css.map */

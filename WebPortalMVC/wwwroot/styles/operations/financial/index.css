@@ -1,0 +1,15 @@
+.financial-page {
+  width: 100%;
+  height: auto;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -webkit-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -moz-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+}
+.financial-page .table-container {
+  max-height: 480px;
+  overflow: auto;
+}
+
+/*# sourceMappingURL=index.css.map */

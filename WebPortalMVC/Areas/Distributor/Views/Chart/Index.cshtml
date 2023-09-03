@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewData["Title"] = "Team Chart";
+    Layout = "~/Views/Shared/_LayoutDistributors.cshtml"; 
+}
+
+<link href="~/styles/operations/team-chart/Index.css" rel="stylesheet" type="text/css" />
+<style>
+    .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    .node text {
+        font: 12px sans-serif;
+        text-anchor: middle;
+    }
+
+    .node image {
+        width: 40px;
+        height: 40px;
+        clip-path: circle(20px at center);
+    }
+
+    .node-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+        .node-content p {
+            margin: 0;
+        }
+
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 1.5px;
+    }
+</style>
+
+<div class="team-chart-page">
+    <div id="initial-account" style="display: none;">
+        <div class="node-item" style="background-color: #e0e0e0;" name="no-distrbutors" dist-id="hmsP+WtDYq+keiDIiuHGwoTH5ZppU87kBY/tC7Vrx20807E=">
+            <img src="/assets/img/userimg.png" dist-id="hmsP+WtDYq+keiDIiuHGwoTH5ZppU87kBY/tC7Vrx20807E=">
+            <p dist-id="hmsP+WtDYq+keiDIiuHGwoTH5ZppU87kBY/tC7Vrx20807E=">
+                <span class="material-symbols-sharp">add</span>
+            </p> 
+        </div>
+    </div>
+  <svg></svg>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="script.js"></script>
+</div>
+
+<div class="dialog-distributor" id="dist-dialog" style="display: none;">
+    <div class="dark-bg"></div>
+    <div class="dialog-body">
+        <div class="head-dialog">
+            <h2>Encode Action</h2>
+            <span class="material-symbols-sharp" id="btn-close">
+            close
+            </span>
+        </div>
+        <hr/>
+        <div class="actions">
+            <div class="item-action" id="view-binary-struct">
+                <span class="material-symbols-sharp">
+                account_tree
+                </span>
+                <label>VIEW BINARY STRUCTURE</label>
+            </div>
+            <div class="item-action" id="encode-unilevel-points">
+                <span class="material-symbols-sharp">
+                crowdsource
+                </span>
+                <label>ENCODE UNILEVEL POINTS</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="javascript:void(0);" id="form-team-binary">
+    @Html.AntiForgeryToken()
+</form>
+
+
+
+
+    
+    
+    
+    
+
+
+<script>
+    $(document).ready(function () {
+        authenticateDistributorPage(() => {
+            getBinaryDetails();
+        });
+    
+        BreadCrumbData([
+            {
+                title: "Chart",
+                url: "@(Url.Content("~/Distributor/Chart/"))"
+            }, {
+                title: "Team",
+                url: "@(Url.Content("~/Operations/Chart/"))"
+            }
+        ])
+    });
+    
+    
+    
+    @*$("#btn-close").on('click', function (){
+        $("#dist-dialog").hide();
+    });
+    let binaryData = "";
+    let binID = "";
+    let distID = "";
+
+    $("#view-binary-struct").on('click', function (){
+        window.location.href = `@(Url.Content($"~/Distributor/Chart/"))` + `${binaryData}/Team?tp=binary`;
+    });
+
+    $("#encode-unilevel-points").on('click', function (){
+        window.location.href = `/Distributor/Chart/${distID}/Team/Encode/Unilevel/${binID}`
+    });
+
+    
+    $(document).on('click','[name="no-distrbutors"]', function (event){
+        let dataParam = $(event.target).attr("dist-id");
+        dataParam = dataParam.replaceAll("/","-xtempx93-xtemp-");
+        dataParam = dataParam.replaceAll("+","xpls-xtemp-xplus");
+        //window.location.href = ``;
+    });
+
+    *@
+    $(document).on('click','[name="dist-node"]', function (){
+        let dataParam = $(event.target).attr("data");
+        binaryData = dataParam;
+        distID = $(event.target).attr("dist-id");
+        binID = $(event.target).attr("bin-id");
+        window.location.href = `@(Url.Content($"~/Distributor/Chart/Index"))?tp=${binaryData}`;
+        @*$("#dist-dialog").show();*@
+    })
+    
+    function getBinaryDetails(){
+         SHILoadingStart();
+         
+         var form = $('#form-team-binary');
+         var token = $('input[name="__RequestVerificationToken"]', form).val();
+         var form_Data = new FormData(); 
+         form_Data.append("__RequestVerificationToken", token); 
+         
+         if ("@ViewBag.isBinary".toUpperCase() === "TRUE"){
+             form_Data.append("bin_data", "@ViewBag.binData"); 
+         }
+         
+         $.ajax({
+            url: "/Distributor/Chart/DistributorsTeamViaBinary",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                let {level_list, max_level} = data;
+                generateBinaryTreeUI(level_list, max_level);
+            },
+            error: function (response){
+                const { status, responseText } = response;
+                if(status === 400){
+                    showDialog(() =>{
+                    },"DANGER","Binary Chart", responseText)
+                    SHILoadingStop();
+                }else if (status === 401){
+                   refreshToken(() => {
+                       getBinaryDetails();
+                   });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+         })
+    }
+
+    
+    function generateBinaryTreeUI(data, max_level){
+        if (data.length === 1){
+            $("#initial-account").show();
+           // $("#initial-account").html(data[0].content);
+        }
+        const dataMap = {};
+        data.forEach(obj => (dataMap[obj.id] = obj));
+
+        // Find the root node
+        let root;
+        data.forEach(obj => {
+          if (obj.parentId === null) {
+            root = obj;
+            return;
+          }
+        });
+
+        // Add children to the hierarchy
+        function addChildren(node) {
+          const children = data.filter(obj => obj.parentId === node.id);
+          children.forEach(child => {
+            const childNode = { ...child, children: [] };
+            node.children.push(childNode);
+            addChildren(childNode);
+          });
+        }
+
+        // Create the hierarchical structure
+        const hierarchy = { ...root, children: [] };
+        addChildren(hierarchy);
+        const totalLength = [1,2,4,8,16,32];
+        let pixels = 90;
+        switch (max_level) {
+          case 1:
+              pixels = 150;
+          break;
+          case 2:
+              pixels = 150;
+          break;
+          case 3:
+              pixels = 120;
+          break;
+          case 4:
+              pixels = 138;
+          break;
+          case 5:
+              pixels = 138;
+          break;
+          case 6:
+              pixels = 138;
+          break;
+          default:
+          break;
+        }
+        const totalWidth = (totalLength[max_level - 1] * pixels);
+        const totalHeight = (max_level * 164);
+        // Set up the tree layout
+        var margin = { top: 40, right: 12, bottom: 20, left: 24 };
+        var width = totalWidth - margin.right - margin.left;
+        var height = totalHeight - margin.top - margin.bottom;
+
+        var svg = d3.select("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var tree = d3.tree()
+            .size([width, height]);
+
+        // Generate the nodes and links
+        var nodes = d3.hierarchy(hierarchy);
+        var links = tree(nodes).links();
+
+        // Draw the links
+        svg.selectAll(".link")
+            .data(links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", d3.linkVertical()
+                .x(function (d) { return d.x; })
+                .y(function (d) { return d.y; }));
+
+        // Draw the nodes
+        var node = svg.selectAll(".node")
+            .data(nodes.descendants())
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            })
+            .on("click", function (d) {
+                console.log("Clicked:", d.data.name);
+            });
+
+
+        node.append("foreignObject")
+            .attr("x", -70)
+            .attr("y", -25)
+            .attr("width", 140)
+            .attr("height", 180)
+            .html(function (d) { return d.data.content; });
+    }
+</script>

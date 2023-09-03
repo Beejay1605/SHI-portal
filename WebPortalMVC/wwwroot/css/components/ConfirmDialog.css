@@ -1,0 +1,124 @@
+.dialog-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  z-index: 9999999;
+}
+.dialog-container .bg-dark {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #000000;
+  opacity: 0.6;
+  z-index: 9999999999;
+}
+.dialog-container .dialog-multi-buttons {
+  width: 400px;
+  height: auto;
+  max-height: 80vh;
+  margin: auto;
+  background-color: #ffffff;
+  filter: drop-shadow(0px 12px 60px rgba(0, 0, 0, 0.16));
+  border-radius: 12px;
+  z-index: 99999999999;
+}
+.dialog-container .dialog-multi-buttons .dialog-header {
+  width: 100%;
+  height: auto;
+  padding: 16px 24px;
+  position: relative;
+}
+.dialog-container .dialog-multi-buttons .dialog-header h3 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #151515;
+  margin: 0px;
+}
+.dialog-container .dialog-multi-buttons .dialog-header a {
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  color: #2e2e2e;
+}
+.dialog-container .dialog-multi-buttons hr {
+  margin: 0px;
+}
+.dialog-container .dialog-multi-buttons .dialog-body {
+  width: 100%;
+  height: auto;
+  padding: 16px 24px;
+}
+.dialog-container .dialog-multi-buttons .dialog-body p {
+  font-family: "Asap";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #677788;
+}
+.dialog-container .dialog-multi-buttons .dialog-footer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 16px 24px;
+  padding-top: 0px;
+}
+.dialog-container .dialog-multi-buttons .dialog-footer button:first-child {
+  margin-left: auto;
+}
+.dialog-container .dialog-multi-buttons .dialog-footer button {
+  margin-right: 8px;
+}
+.dialog-container .dialog-multi-buttons .dialog-footer button:last-child {
+  margin-right: 0px;
+}
+.dialog-container .dialog-ok {
+  width: 400px;
+  height: auto;
+  max-height: 80vh;
+  margin: auto;
+  background-color: #ffffff;
+  filter: drop-shadow(0px 12px 60px rgba(0, 0, 0, 0.16));
+  border-radius: 12px;
+  z-index: 99999999999;
+  text-align: center;
+  padding: 24px 16px;
+}
+.dialog-container .dialog-ok .icon {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  margin-left: calc(50% - 30px);
+  background: #25BE75;
+  border-radius: 100px;
+  display: flex;
+}
+.dialog-container .dialog-ok .icon i {
+  margin: auto;
+  font-size: 24px;
+  color: #ffffff;
+}
+.dialog-container .dialog-ok h4 {
+  width: 100%;
+  height: auto;
+  margin-top: 16px;
+}
+.dialog-container .dialog-ok p {
+  font-family: "Asap";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  color: #677788;
+}
+.dialog-container .dialog-ok button {
+  width: 100%;
+  height: auto;
+  color: #ffffff !important;
+}/*# sourceMappingURL=ConfirmDialog.css.map */

@@ -1,0 +1,285 @@
+﻿@using System.Globalization
+@using Domain.Models.Components;
+@model Domain.DTO.Operations.Products.Output.ProductEditOutputDto;
+
+@{
+    ViewData["Title"] = "Edit Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/styles/operations/Products/Details.css" rel="stylesheet" type="text/css" />
+
+<div class="product-details-page">
+    <div class="cover-photo">
+        @if (Model?.cover_photo == "" || Model?.cover_photo == null)
+        {
+            <img src="~/assets/design/Default_Image_Thumbnail.png" id="img-cover-photo" alt="">
+        }
+        else
+        {
+            <img class="img-style" src="@("data:image/jpg;base64,"+Model.cover_photo)" />
+        }
+        <input type="file" id="input-file-cover-img" hidden accept="image/png, image/gif, image/jpeg">
+    </div> 
+    <div class="row-details">
+        <div class="img-column"> 
+            @if(Model.product_img != null && Model.product_img.Count() > 0){
+                <img class="img-main" name="product-main-sub-img" idx="0" src="@(@"data:image/jpg;base64," + Model.product_img[0].photo_base_64)" alt="">
+            }else{
+                <img class="img-main" src="~/assets/design/Default_Image_Thumbnail.png" id="img-cover-photo" alt="">
+            }
+            <div class="container-pictures"> 
+                <ul id="img-product-list">
+                    @if(Model.product_img != null)
+                    {   
+                        int pimg_idx=0;
+                        foreach(var img in Model.product_img)
+                        {
+                            <li name="product-main-sub-img" idx="@pimg_idx"> 
+                                <img src="@("data:image/jpg;base64,"+img.photo_base_64)" alt="">
+                            </li>
+                            pimg_idx++;
+                        }
+                    }
+                </ul> 
+            </div>
+        </div>
+        <div class="info-container">
+            <div class="row-container">
+                <h1 class="product-name">@(Model?.p_name ?? "")</h1>
+                <div class="row-buttons">
+                    <a href="@("/Operations" + Url.Action("Edit", "Products") + "?id=" + Model.ID.ToString())" class="btn btn-dark">
+                        <span class="material-symbols-sharp">
+                            edit
+                        </span>
+                        Edit
+                    </a>
+                    <button href="#" class="btn btn-outline-danger" id="btn-delete-product" name="btn-delete">
+                        <span class="material-symbols-sharp">
+                            delete
+                        </span>
+                        Delete
+                    </button>
+                </div>
+            </div>
+            <div class="price-container">
+                @* <h4 class="product-price">₱ @(Model?.price.ToString("#,##0.00") ?? "0.00")</h4> *@
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">TYPE</th>
+                      <th scope="col">SRP</th>
+                      <th scope="col">DISCOUNT</th>
+                      <th scope="col">UNIT_PRICE</th>
+                    </tr>
+                  </thead>
+                  <tbody> 
+                    <tr>
+                      <th scope="row">DISTRIBUTORS</th>
+                      <td>₱ @(Model.price.ToString("N2", new CultureInfo("en-US")))</td>
+                      <td>@((100 - (((Model.membership_price ?? Model.price) / Model.price) * 100 )).ToString("N2", new CultureInfo("en-US")))%</td>
+                      <td>₱ @(((Model.membership_price ?? Model.price).ToString("N2", new CultureInfo("en-US"))))</td>
+                    </tr> 
+                    <tr>
+                      <th scope="row">NON DISTRIBUTORS</th>
+                      <td>₱ @(Model.price.ToString("N2", new CultureInfo("en-US")))</td>
+                      <td>@((100 - (((Model.non_membership_discounted_price ?? Model.price) / Model.price) * 100 )).ToString("N2", new CultureInfo("en-US")))%</td>
+                      <td>₱ @(((Model.non_membership_discounted_price ?? Model.price).ToString("N2", new CultureInfo("en-US"))))</td>
+                    </tr> 
+                  </tbody>
+                </table>
+            </div>
+            <br>
+            <div class="row-detail-categ">
+                <small class="title-categ">Category</small>
+                <div class="categ-content">
+                    <p class="category-container">@(Model.category ?? "")</p>
+                </div>
+            </div>
+            <div class="row-detail-categ">
+                <small class="title-categ">Stocks</small>
+                <div class="categ-content">
+                    <p class="desc">@("0")</p>
+                </div>
+            </div>
+
+            <div class="row-detail-categ">
+                <small class="title-categ">Set of Products</small>
+                <div class="categ-content" style="width: 100%"> 
+                    <ul>
+                        @if(Model.package_products != null)
+                        {
+                            foreach(var pp in Model.package_products)
+                            { 
+                                <li>
+                                    <p class="desc" style="margin-bottom: 0px;"><b>@(pp.quantity)</b> @(pp.single_product.p_name ?? "")  </p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="row-detail-categ">
+                <small class="title-categ">Mini Description</small>
+                <div class="categ-content">
+                    <p class="desc">@(Model.mini_desc ?? "")</p>
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+    <h5 class="description">DESCRIPTION</h5>
+    <div id="editor">
+        @Html.Raw(Model.description)
+    </div>
+
+    <div class="view-product-pictures" id="view-product-pictures" style="display: none;">
+        <div class="dark-bg" id="dark-bg"></div>
+        <div class="view-img-body">
+            <div class="close-btn" id="btn-close-view-img">
+                <span class="material-symbols-sharp">
+                    close
+                </span>
+            </div>
+            <div class="left-btn" id="btn-prod-img-left">
+                <span class="material-symbols-sharp">
+                    arrow_back_ios_new
+                </span>
+            </div>
+            <div class="right-btn" id="btn-prod-img-right">
+                <span class="material-symbols-sharp">
+                    arrow_forward_ios
+                </span>
+            </div>
+            <img class="view-main-img" id="view-main-img" src="@("data:image/jpg;base64,"+ Model.product_img[0].photo_base_64)" alt=""> 
+            <div class="container-pictures"> 
+                <ul id="img-product-list">
+                    @if(Model.product_img != null)
+                    { 
+                        int idx =0;
+                        foreach(var img in Model.product_img)
+                        {
+                            idx++;
+                            <li name="prod-img-images" idx="@(idx-1)"> 
+                                <img name="view_product_images" idx="@(idx-1)" src="@("data:image/jpg;base64,"+img.photo_base_64)" alt="">
+                            </li>
+                        }
+                    }
+                </ul> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let productImgIdx = 0; 
+    $(document).ready(function () {
+        BreadCrumbData([{
+            title: "Products",
+            url: "/Operations" + "@Url.Action("Index","Distributors")"
+        }, {
+            title: "Details",
+            url: "/Operations" + "@Url.Action("Registration","Distributors")"
+        }]);
+         authenticateOperationsPage(() => {
+            
+        });
+    });
+
+    $("#btn-close-view-img").on('click', function(){
+        $("#view-product-pictures").hide();
+    });
+    
+    $("#dark-bg").on('click', function(){
+        $("#view-product-pictures").hide();
+    });
+
+    $("#btn-prod-img-left").on('click', function(){
+        if(productImgIdx > 0){
+            imgIdxChange((productImgIdx - 1),$(`img[name='view_product_images'][idx='${productImgIdx - 1}']`).attr("src"));
+        } else{
+            const lngth = $(`img[name='view_product_images']`).length;
+            imgIdxChange((lngth - 1),$(`img[name='view_product_images'][idx='${lngth - 1}']`).attr("src"));
+        }
+    });
+     
+    $("#btn-prod-img-right").on('click', function(){ 
+        if(($(`img[name='view_product_images']`).length - 1) > productImgIdx){
+            imgIdxChange((productImgIdx + 1),$(`img[name='view_product_images'][idx='${productImgIdx + 1}']`).attr("src"));
+        }else{
+            imgIdxChange((0),$(`img[name='view_product_images'][idx='0']`).attr("src"));
+        } 
+    });
+
+    $("li[name='prod-img-images']").on('click', function(){
+        const idx = $(this).attr("idx"); 
+        imgIdxChange((idx),$(`img[name='view_product_images'][idx='${idx}']`).attr("src"));
+    });
+
+    $("[name='product-main-sub-img']").on('click', function(){
+        const idx = $(this).attr("idx"); 
+        imgIdxChange((idx),$(`img[name='view_product_images'][idx='${idx}']`).attr("src"));
+        $("#view-product-pictures").show();
+    });
+
+    function imgIdxChange(idx, imgData){  
+        productImgIdx = parseInt(idx);
+        $("#view-main-img").attr("src", imgData);
+    }
+
+
+    
+    function redirectionToAction(url){
+        window.location.href = url;
+    }
+
+
+    
+    $("#btn-delete-product").on('click', function (e){
+        const id = "@Model.ID";
+        showDialogBoxMultiButtons({
+            title: "Create Product",
+            body: `Are you sure you want to delete this product?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="executeDelete('${id}')">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+
+    function executeDelete(id){
+        closeDialogBoxMultiButtons();
+        SHILoadingStart();
+         $.ajax({
+            url: "@("/Operations" + Url.Action("DeleteAction", "Products") + "?id=")" + id,
+            type: "DELETE",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data){
+                showDialog(() => {
+                    window.location.href = "@Url.Content(@"~/Operations/Products/Index")";
+                }, "SUCCESS", "Delete Product", "Successfully Delete Product");
+            },
+            error: function (response){ 
+                const { status,  responseText} = response;
+                if(status === 400){
+                    showDialog(() =>{
+
+                    },"DANGER","Products", responseText);
+                    SHILoadingStop();
+                }else if (status === 401){
+                    refreshToken(() => {
+                        executeDelete(id);
+                    });
+                }else{
+                    SHILoadingStop();
+                }
+            }
+         })
+    }
+</script>

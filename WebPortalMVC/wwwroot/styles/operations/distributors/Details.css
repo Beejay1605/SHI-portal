@@ -1,0 +1,36 @@
+.main .Details {
+  display: flex;
+  width: 100%;
+}
+.main .Details img {
+  width: 16%;
+  height: 100%;
+  padding: 6px;
+}
+.main .Details span {
+  float: center;
+  margin-left: 16px;
+  font: arial;
+}
+.main .Details span .dots {
+  background-color: forestgreen;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 2px;
+  margin-bottom: 0px;
+}
+.main .lbl-name-ident .lbl-name {
+  font-size: 30px;
+  font-family: arial;
+  color: #999;
+  padding: 24px;
+  padding-top: 0;
+  margin-bottom: 0px;
+}
+.main .age-sex .lbl {
+  padding: 6px;
+  font-family: arial;
+  size: 12px;
+}/*# sourceMappingURL=Details.css.map */

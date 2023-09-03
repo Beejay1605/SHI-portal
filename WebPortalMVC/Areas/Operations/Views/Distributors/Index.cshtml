@@ -1,0 +1,216 @@
+﻿@using Domain.DTO.Operations.Distributors.Output;
+@using Domain.Models.Components;
+@using Manager.Commons.Const
+
+@{
+    ViewData["Title"] = "Distributors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var formModel = new InputComponentModel
+            {
+                group = "registration-group"
+            };
+}
+<link href="~/styles/operations/distributors/index.css" rel="stylesheet" type="text/css" />
+<div class="DistributorListPage">
+    <div class="row header">
+        <div class="col-12 btn-register">
+            <div class="col-12" style="display: flex; width:100%;">
+                @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                id = "txt-search",
+                group = formModel.group,
+                placeholder = "Search"
+                })
+                <button class="btn btn-dark" style="margin-left:8px;" id="btn-search">
+                    <span class="material-symbols-sharp">
+                        search
+                    </span> Search
+                </button>
+                <a href="@("/Operations"+Url.Action("Registration","Distributors"))" type="button" class="btn btn-labeled btn-primary" style="margin-left: auto !important;">
+                    <span class="material-symbols-sharp">
+                        person_add
+                    </span> New Distributor
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="row" style="display:flex;width:100%;padding:1px;">
+        <table class="table table-borderless" id="mytable">
+            <thead class="table-header">
+                <tr>
+                    <th></th>
+                    <th>FULL NAME</th>
+                    <th>EMAIL</th>
+                    <th>DIRECT UPLINE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody class="table-body" id="table-body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        BreadCrumbData([{
+            title: "Distributors",
+            url: "/Operations" + "@Url.Action("Index","Distributors")"
+        }, {
+            title: "List",
+            url: "/Operations" + "@Url.Action("Index","Distributors")"
+        }])
+        authenticateOperationsPage(() => {
+            DistributorsData();
+        });
+
+    });
+    $("#view-details").click(function () {
+        var url = "/Operations" + "@Url.Action("Details","Distributors")"
+        window.location.href = url;
+    });
+    $("#register").click(() => {
+        var url = "/Operations" + "@Url.Action("Registration","Distributors")"
+        window.location.href = url;
+    });
+
+    $("#btn-search").on("click", function () {
+
+        DistributorsData();
+    });
+
+
+    $("#txt-search").on("keyup", (e) => {
+        if (e.target.value === "") {
+            DistributorsData();
+            return;
+        }
+        if (e.which == 13) {
+            DistributorsData();
+        }
+    })
+
+    $("body").delegate("button[name='btn-delete']", 'click', function (e) {
+        const id = $(this).attr("id");
+        showDialogBoxMultiButtons({
+            title: "Create Product",
+            body: `Are you sure you want to add this product?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="deleteDistributor('${id}')">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+    
+    function deleteDistributor(id){
+        closeDialogBoxMultiButtons();
+        SHILoadingStart();
+        $.ajax({
+            url: "@("/Operations" + Url.Action("DeleteAction", "Distributors") + "?id=")" + id,
+            type: "DELETE",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (data) {
+                DistributorsData();
+            },
+            error: function (response) {
+                const {status} = response;
+                if (status === 400) {
+                    showDialog(() => {
+
+                    }, "DANGER", "Registration", response.responseText)
+                    SHILoadingStop();
+                }else if (status === 401){
+                    refreshToken(() => {
+                        deleteDistributor(id);
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        })
+    }
+
+    function DistributorsData() {
+        SHILoadingStart();
+        $("#table-body").html("");
+        $.ajax({
+            url: "/Operations" + `@Url.Action("DistributorsList","Distributors")?search=` + ($("#txt-search").val() ?? ""),
+            type: "GET",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                console.log(response);
+                const { distributor } = response;
+                distributor?.forEach(item => {
+                    let user_img_str = "";
+
+                    if (!item.user_picture_base_64) {
+                        user_img_str = `<img class="img-style" src="/assets/img/userimg.png" />`;
+                    } else {
+                        user_img_str = `<img class="img-style" src="${("data:image/jpg;base64," + item.user_picture_base_64)}" />`;
+                    }
+
+                    $("#table-body").append(`
+                            <tr class="table-row">
+                                <td class="td">
+                                    ${user_img_str}
+                                </td>
+                                <td class="td">
+                                    <b>${item.first_name} ${item.last_name}</b><br />
+                                    <span class="lbl-bottom">${item.ui_id}</span>
+                                </td>
+                                <td class="td">
+                                        <b>${item.email}</b><br />
+                                    <span class="lbl-bottom">${item.username}</span>
+                                </td>
+                                <td class="td">
+                                    <b>${(item.upline_details.first_name ?? "")} ${(item.upline_details.last_name ?? "")}</b><br />
+                                    <span class="lbl-bottom">${item.account_type}</span>
+                                </td>
+                                <td style="text-align: center;"><b>${item.status}</b></td>
+                                <td class="td" style="padding-top:16px;margin-left: auto;">
+                                    <a href="/Operations/Distributors/${item.ui_id}/Team" class="btn btn-dark">
+                                        <span class="material-symbols-sharp">
+                                            diversity_3
+                                        </span>
+                                    </a>
+                                    <a  href="${("/Operations" + "@Url.Action("Details", "Distributors")" + "?id=" + item.ui_id)}"  id="view-details" class="btn btn-secondary">
+                                        <span class="material-symbols-sharp">
+                                            visibility
+                                        </span>
+                                    </a>
+                                    <a href="${("/Operations" + "@Url.Action("Edit", "Distributors")" + "?id=" + item.ui_id)}" class="btn btn-primary">
+                                        <span class="material-symbols-sharp">
+                                            edit_square
+                                        </span>
+                                    </a>
+                                    <button style="margin-right: auto;" type="button" id="${item.user_ref_ident}" name="btn-delete" class="btn btn-danger">
+                                        <span class="material-symbols-sharp">
+                                            delete
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                })
+            },
+            error: function (response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        DistributorsData();
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+
+            }
+        });
+    } 
+</script>

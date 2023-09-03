@@ -1,0 +1,80 @@
+@using Manager.Commons.Const
+
+<script>
+    function refreshToken(callback) {
+        $.ajax({
+            url: '@Url.Action("NewAccessToken","Login")',
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function(response) {  
+                setToken(response);
+                callback();
+            },
+            error: function(xhr) {
+                // Handle token refresh failure
+                //console.log(xhr);
+                window.location.href = "@Url.Action("Index","Login")"; 
+            }
+        });
+    }
+    
+    function authenticateOperationsPage(authCallBack){
+        SHILoadingStart();
+        $.ajax({
+            url: '@Url.Action("AuthenticateOperationPage","Login")',
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function(response) {  
+                authCallBack();
+                SHILoadingStop();  
+            },
+            error: function(response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        authenticateOperationsPage(authCallBack);
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        });
+    }
+    
+    function authenticateDistributorPage(authCallBack){
+        SHILoadingStart();
+        $.ajax({
+            url: '@Url.Action("AuthenticateDistributorPage","Login")',
+            type: 'GET',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function(response) {  
+                authCallBack();
+                SHILoadingStop();  
+            },
+            error: function(response) {
+                const {status} = response;
+                if (status === 401){
+                    refreshToken(() => {
+                        authenticateDistributorPage(authCallBack);
+                    });
+                }else{
+                    SHILoadingStop();                    
+                }
+            }
+        });
+    }
+    
+    function setToken(token){
+        localStorage.setItem("@SecurityConst.TOKEN_KEY", token)
+    }
+    
+    function getToken(){
+        return localStorage.getItem("@SecurityConst.TOKEN_KEY");    
+    }
+</script>

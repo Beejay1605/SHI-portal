@@ -1,0 +1,62 @@
+﻿<style>
+    .CFLoading {
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        display: flex;
+        z-index: 999999999999;
+    }
+
+    .CF-dark-bg {
+        width: 100%;
+        height: 100vh;
+        background-color: #000000;
+        opacity: 0.7;
+        position: absolute;
+        top: 0;
+        left: 0;
+        position: fixed;
+    }
+
+    .CF-load-animation {
+        width: 140px !important;
+        height: 140px;
+        display: flex;
+        padding: 12px;
+        background-color: #ffffff !important;
+        border-radius: 8px;
+        z-index: 9999999999999999;
+        top: calc(50vh - 70px);
+        left: calc(50% - 70px);
+        position: fixed;
+        box-shadow: 4px 3px 9px -2px rgba(0,0,0,0.75);
+        -webkit-box-shadow: 4px 3px 9px -2px rgba(0,0,0,0.75);
+        -moz-box-shadow: 4px 3px 9px -2px rgba(0,0,0,0.75);
+    }
+</style>
+
+<link rel="stylesheet" href="~/lib/loading-rdics/main.css" />
+<script src="~/lib/loading-rdics/main.js"></script>
+
+<div class="CFLoading" id="cf-loading-animation" style="display:none;">
+    <div class="CF-dark-bg"></div>
+    <div class="CF-load-animation">
+        <div class="lv-squares md lv-left" data-label="Please wait..." style="margin-left: auto;margin-right: auto;"></div>
+    </div>
+</div>
+
+
+<script>
+    let loader = new lv();
+    loader.initLoaderAll();
+    loader.startObserving();
+    loader.stopObserving();
+    let cf_loading_element = document.getElementById("cf-loading-animation");
+    function SHILoadingStop() {
+        cf_loading_element.style.display = "none";
+    }
+    function SHILoadingStart() {
+        cf_loading_element.style.display = "flex";
+    }
+</script>
+

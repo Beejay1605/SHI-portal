@@ -1,0 +1,355 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string fullName = "Lenard Palce";
+    ViewData["Title"] = "Hi, " + fullName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<link href="~/styles/operations/Dashboard/Index.css" rel="stylesheet" type="text/css"/>
+<link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+
+<div class="">
+<!-- Card stats -->
+<div class="row g-6 mb-8 pb-2">
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Total Earnings</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-outlined" style="font-size:30px; color: #1A936F">
+                                attach_money
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Balance</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-outlined" style="font-size:30px; color: #1A936F">
+                                account_balance_wallet
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="h6 font-semibold text-muted text-sm d-block mb-2"> Cash-out Request</span>
+                        <span class="h2 font-bold mb-0" style="color: #1A936F"> $350.4</span>
+                    </div>
+                    <div class="col-auto">
+                        <div class="icon icon-shape bg-tertiary text-white rounded-circle" style="background: #EBF3F5; height: 3rem; width: 3rem;">
+                            <span class="material-symbols-outlined" style="font-size:30px; color: #1A936F">
+                                payments
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row  mt-xl-2 main-div">
+<div class="col-xl-8 col-sm-6 col-12 " id="div-right">
+    <div class="main-card mb-2 card">
+        <div class="card-header">
+            Cash-out Request
+        </div>
+        <div class="table-responsive" style="overflow-x: auto;">
+            <table class="align-middle mb-0 table table-borderless  table-hover ">
+                <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th class="text-center">Amount</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">₱ 100,000</td>
+                    <td class="text-center">
+                        <div class="badge badge-warning">Pending</div>
+                    </td>
+                    <td class="text-center">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">₱ 100,000</td>
+                    <td class="text-center">
+                        <div class="badge badge-success">Aproved</div>
+                    </td>
+                    <td class="text-center">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">₱ 100,000</td>
+                    <td class="text-center">
+                        <div class="badge badge-danger">Cancelled</div>
+                    </td>
+                    <td class="text-center">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">₱ 100,000</td>
+                    <td class="text-center">
+                        <div class="badge badge-info">Pending</div>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" id="PopoverCustomT-4" class="btn btn-danger btn-sm">Cancel</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-block text-center card-footer m-0">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+    <div class="main-card card">
+        <div class="card-header">
+            Purchase History
+        </div>
+        <div class="table-responsive">
+            <table class="align-middle mb-0 table table-borderless  table-hover" style="overflow-y: scroll;">
+                <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th >Product</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td >HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td >HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td >HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td >HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="widget-content p-0">
+                            <div class="widget-content-wrapper ">
+                                <div class="widget-content-left flex2 ms-3">
+                                    <div class="widget-heading">04/02/2023 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td >HERBAL SOAP</td>
+                    <td class="text-center">2</td>
+                    <td class="text-center">₱ 10,000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-block text-center card-footer m-0">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+</div>
+<div class="col-xl-4 col-sm-6 col-12 ">
+    <div class="main-card  card" id="div-left">
+        <div class="card-header">
+            Transaction History
+        </div>
+        <div>
+            <table class="align-middle mb-0 table table-borderless table-hover p-5">
+                <thead>
+                <tr>
+                    <th class="ps-4">Transaction Type</th>
+                    <th >Date</th>
+                </tr>
+                </thead>
+                <tbody class="table-body-padding">
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                <tr >
+                    <td class="ps-4">Withdraw</td>
+                    <td>04/02/2023 11:00 AM</td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="d-block text-center card-footer mt-auto">
+            <span class="h6 font-bold mb-0" style="color: #1A936F">VIEW ALL</span>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(() => {
+    authenticateOperationsPage(() => {});
+    BreadCrumbData([{
+        title: "Welcome Back!!",
+    }]);
+
+    // Custom styles for breadcrumb
+     $(".breadcrumb").css("margin", "0");
+     $(".breadcrumb").css("padding", "0"); 
+     $(".breadcrumb").css("position", "relative");
+     $(".breadcrumb").css("top", "10px");
+     $(".breadcrumb-item").css("font-size", "15px");
+     $(".breadcrumb").css("background-color", "transparent"); 
+});
+ $(document).ready(function() {
+        // Calculate the height of col-xl-8
+        var col8Height = $("#div-right").outerHeight();
+        // Set the height of col-xl-4 to match col-xl-8
+        $("#div-left").height(col8Height);
+    });
+</script>

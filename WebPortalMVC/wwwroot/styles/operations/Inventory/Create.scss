@@ -1,0 +1,48 @@
+﻿
+
+
+.create-stocks-inventory{
+    width: 100%;
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    -webkit-box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    -moz-box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    margin-bottom: 16px;
+
+
+    .rich-text-box{
+        margin-top: 24px;
+
+        .ck-editor__main, .ck-content{
+            min-height: 440px;
+        }
+        .ck, .ck-editor__main, .ck-content{
+            border-color: #1A936F !important;
+        }
+    }
+    
+    
+    .buttons-sec{
+        text-align: right;
+        padding-top: 24px;
+        
+        button{
+            width: 160px;
+        }
+    }
+}
+
+
+
+.product-inventory-history{
+    width: 100%;
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    -webkit-box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    -moz-box-shadow: 4px 4px 5px -3px rgba(59,59,59,0.75);
+    margin-bottom: 16px;
+    min-height: 380px !important;
+     
+}

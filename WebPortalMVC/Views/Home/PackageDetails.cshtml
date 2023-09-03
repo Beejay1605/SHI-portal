@@ -1,0 +1,279 @@
+﻿@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Package Details";
+    Layout = null;
+
+}
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .modal-img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .gallery-container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 20px;
+    }
+
+    .gallery-thumbnails {
+        display: flex;
+        justify-content: start;
+        gap: 10px;
+    }
+
+    .thumbnail {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+
+    .gallery-main-image {
+        width: 100%;
+        height: 500px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+        .gallery-main-image:hover {
+            border-color: #ff5252; /* Update with desired border color on hover */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Update with desired box shadow on hover */
+        }
+
+    #mainImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .menu-items {
+        list-style-type: none;
+        font-size: 11px;
+        display: inline-flex;
+        margin-bottom: 0;
+        margin-top: 20px
+    }
+
+    li.active {
+        border-bottom: 3px solid #808080;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<link href="~/styles/public/onlineshop.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
+
+<div class="Main">
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <a asp-action="Index"><div class=""><img src="~/assets/logo/onlinestorelogo.svg" class="MainLogo"></div></a>
+        </div>
+
+        <div class="top-bar__right">
+            <div class="search me-2">
+                <input type="text" placeholder="Search..." class="searchinput">
+                <button class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+            <div class="account"><i class="fa fa-user" aria-hidden="true"></i> Account</div>
+            <div class="shopping"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</div>
+
+            <div class="hamburger">
+                <i class="fa fa-bars burger"></i>
+            </div>
+
+        </div>
+    </header>
+    <div class="menu">
+        <span class="close-button">&times;</span>
+        <nav class="mobile-nav">
+            <ul>
+                <li onclick="location.href='@Url.Action("Index", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Products</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-archive" aria-hidden="true"></i> Packages</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-user" aria-hidden="true"></i> User</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div class="Poducts-Detals-main mt-5 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="images px-3 mt-3">
+                                <div class="gallery-main-image mb-2">
+                                    <img src="/assets/img/dog.png" alt="Main Image" class="mainImage" id="mainImage" onclick="displayLargeImage()">
+                                </div>
+                                <div class="gallery-thumbnails">
+                                    <img src="/assets/img/dog.png" alt="Thumbnail 1" class="thumbnail" onmouseover="displayImage('/assets/img/dog.png')">
+                                    <img src="/assets/img/gamot.png" alt="Thumbnail 2" class="thumbnail" onmouseover="displayImage('/assets/img/gamot.png')">
+                                    <img src="/assets/img/brown.png" alt="Thumbnail 3" class="thumbnail" onmouseover="displayImage('/assets/img/brown.png')">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product-details px-3">
+                                <div class="d-flex justify-content-between align-items-center back-cart ">
+                                    <a asp-action="Index" class="d-flex align-items-center text-decoration-none text-muted back-cart"> <i class="fa fa-long-arrow-left back-cart"></i> <span class="ml-1 back-cart">Back</span> </a> <i class="fa fa-shopping-cart back-cart" style="color:#1A936F"></i>
+                                </div>
+                                <div class="mt-4 mb-4">
+                                    <span class="text-uppercase text-muted brand">category</span>
+                                    <h2 class="text-uppercase" style="color: #1A936F">Package Name</h2>
+                                    <div class="price d-flex flex-row align-items-center">
+                                        <span class="act-price me-2 fw-bold" style="color: #1A936F">$836.00</span>
+                                        <div><span class="text-muted">80% OFF</span> </div>
+                                    </div>
+                                </div>
+                                <p class="MiniDetails">
+                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                    It has survived not only five centuries, but also the leap into electronic typesetting,
+                                </p>
+                                <div class="sizes">
+                                    <div>
+                                        <span class="me-2 fw-bold">Quantity:</span><button onclick="decreaseQuantity()" style=" border:none">-</button>
+                                        <input type="number" id="quantityInput" min="0" value="0" style="width:2rem; border:none">
+                                        <button onclick="increaseQuantity()" style="border:none">+</button>
+                                    </div>
+                                </div>
+                                <div class="cart mt-4 align-items-center">
+                                    <button class="btn text-uppercase me-2 px-4" style="background:#1A936F; color:#ffffff" onclick="location.href='@Url.Action("Addtocart", "Home")'"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                                    <button style="border: none; background: none; "><i class="fa fa-heart me-1" style="color:#FF5959; font-size:20px;"></i></button>
+                                    <button style="border: none; background: none; "><i class="fa fa-share-alt" style="color: #4592AF; font-size: 20px; "></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="menu-items">
+                                <li class="active">Product Description</li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                            <div style="width:100%;border-top:1px solid silver" class="small p-3">
+                                <p style="padding:15px;">
+                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                </p>
+
+                                <ul>
+                                    <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</li>
+                                    <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</li>
+                                    <li>Lorem Ipsum has been the industry's </li>
+                                    <li>standard dummy text ever since the 1500s</li>
+                                    <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</li>
+                                    <li>Lorem Ipsum </li>
+                                    <li>Lorem Ipsum has been </li>
+                                    <li> text ever since the 1500s</li>
+                                    <li>Lorem Ipsum has been the industry's standard dummy tex</li>
+                                    <li>Lorem Ipsum has been the industry's standard dummy </li>
+                                    <li>dummy text ever since the 1500s</li>
+                                    <li>Lorem Ipsum has been the industry's</li>
+                                    <li>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <img src="" alt="Large Image" class="modal-content" id="modalImage">
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var hamburger = document.querySelector('.hamburger');
+        var menu = document.querySelector('.menu');
+        var closeButton = document.querySelector('.close-button');
+
+        hamburger.addEventListener('click', function () {
+            menu.classList.add('active');
+        });
+
+        closeButton.addEventListener('click', function () {
+            menu.classList.remove('active');
+        });
+    });
+    function displayImage(imageUrl) {
+        document.getElementById('mainImage').src = imageUrl;
+    }
+
+    function displayLargeImage() {
+        var imageUrl = document.getElementById('mainImage').src;
+        document.getElementById('modalImage').src = imageUrl;
+        document.getElementById('modal').style.display = 'block';
+    }
+
+    // Close the modal when the user clicks outside the image
+    var modal = document.getElementById('modal');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    function decreaseQuantity() {
+        var quantityInput = document.getElementById('quantityInput');
+        var currentQuantity = parseInt(quantityInput.value);
+
+        if (currentQuantity > 0) {
+            quantityInput.value = currentQuantity - 1;
+        }
+    }
+
+    function increaseQuantity() {
+        var quantityInput = document.getElementById('quantityInput');
+        var currentQuantity = parseInt(quantityInput.value);
+
+        quantityInput.value = currentQuantity + 1;
+    }
+
+</script>

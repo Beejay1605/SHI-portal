@@ -1,0 +1,38 @@
+.create-stocks-inventory {
+  width: 100%;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -webkit-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -moz-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  margin-bottom: 16px;
+}
+.create-stocks-inventory .rich-text-box {
+  margin-top: 24px;
+}
+.create-stocks-inventory .rich-text-box .ck-editor__main, .create-stocks-inventory .rich-text-box .ck-content {
+  min-height: 440px;
+}
+.create-stocks-inventory .rich-text-box .ck, .create-stocks-inventory .rich-text-box .ck-editor__main, .create-stocks-inventory .rich-text-box .ck-content {
+  border-color: #1A936F !important;
+}
+.create-stocks-inventory .buttons-sec {
+  text-align: right;
+  padding-top: 24px;
+}
+.create-stocks-inventory .buttons-sec button {
+  width: 160px;
+}
+
+.product-inventory-history {
+  width: 100%;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -webkit-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  -moz-box-shadow: 4px 4px 5px -3px rgba(59, 59, 59, 0.75);
+  margin-bottom: 16px;
+  min-height: 380px !important;
+}
+
+/*# sourceMappingURL=Create.css.map */

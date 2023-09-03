@@ -1,0 +1,117 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<style>
+
+    .dialog-success{
+        width: 100vw;
+        height: 100vh;
+        display: flex; 
+        position: fixed;
+        top:0px;
+        left: 0px;
+        z-index: 9999999999999;
+    }
+
+    .dialog-success .bg{
+        width: 100vw;
+        height: 100vh !important;
+        top:0px;
+        height: 0px;
+        position: absolute;
+        background-color: #000000;
+        opacity: 0.6;
+        z-index: 99999999999;
+    }
+
+    .dialog-success .dialog-content{
+        width: 340px;
+        height: auto;
+        margin: auto;
+        padding: 16px;
+        border-radius: 16px;
+        z-index: 9999999999999999;
+        background-color: #ffffff;
+        text-align: center;
+    }
+
+    .dialog-success #dialog-type{
+        font-size:54px;
+        
+    }
+
+    .dialog-success header-dialog{
+        display: flex;
+        width: 100%;
+
+    }
+
+    .dialog-success .header-dialog h6{
+        /*height: 40px;
+        object-fit: contain;
+        object-position: center;*/
+        text-align: left;
+    }
+</style>
+
+
+<div class="dialog-success" id="dialog-success" style="display: none !important;">
+    <div class="bg"></div>
+    <div class="dialog-content">
+        <div class="header-dialog">
+            @*<img src="~/assets/logo/logo_gold.svg" />*@
+             <h6 id="dialog-header-title">Title Name</h6>
+        </div>
+        <hr />
+        <span class="material-symbols-sharp" id="dialog-type">
+            done
+        </span>
+        <br/> 
+        <p class="cf-text-charcoal-gray mt-3" id="dialog-message">
+            Thank you for sending your inquiry.
+            We’ll reach out to you shortly
+        </p>
+        <button class="btn btn-success" style="width: 100%;" id="btnOk">Ok</button>
+    </div>
+</div>
+
+
+<script>
+    let successDialogCallBack = function (paramCallBack) {
+        paramCallBack();
+    };
+    function showDialog(paramCallBack, type,title, message) {
+        $("#dialog-success").attr("style", "");
+        $("#dialog-header-title").html(title);
+        //$("#dialog-type").html(type);
+        switch (type) {
+          case "SUCCESS":
+            // code block
+            $("#dialog-type").html("Done");
+            $("#dialog-type").attr("style","color: #1A936F;");
+            $("#btnOk").attr("class","btn btn-success");
+            break;
+          case "DANGER":
+            // code block
+            $("#dialog-type").html("error");
+            $("#dialog-type").attr("style","color: #FF5959;");
+            $("#btnOk").attr("class","btn btn-danger");
+            break;
+          default:
+            // code block
+        }
+        $("#dialog-message").html(message);
+        successDialogCallBack = function () {
+            paramCallBack();
+        };
+    }
+
+    $("#btnOk").on('click', function () { 
+        $("#dialog-success").attr("style", "display: none !important;");
+        successDialogCallBack();
+    });
+</script>

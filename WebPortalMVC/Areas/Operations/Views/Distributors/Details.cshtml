@@ -1,0 +1,270 @@
+﻿@using Domain.DTO.BaseDto;
+@using Domain.Models.Components;
+@model Domain.DTO.BaseDto.DistributorsDetailsDto;
+@{
+    ViewData["Title"] = "Distributor Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var formModel = new InputComponentModel{
+        group = "registration-group"
+    };
+    var uplines = new List<DistributorsDetailsDto>();
+    var distributorsdata = new List<DistributorsDetailsDto>();
+
+    if (Model?.upline_details != null)
+    {
+        uplines.Add(Model.upline_details);
+    }
+   
+}
+
+
+<link href="~/styles/operations/distributors/Registration.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <div class="registration-page">
+            <div class="row form-fields">
+                    <form action="javascript:void(0);" id="form-registration">
+                            <div class="col-12">
+                                <div class="header">
+                                    <h4 class="align-1tent-start">Personal Information</h4>
+                                </div>
+                            </div>
+                            <div class="col-12" style="display: flex;width: 100%;">
+                                <div class="member-image">
+                                    @if(Model?.user_picture_base_64  == null || Model?.user_picture_base_64 == ""){
+                                        <img src="~/assets/img/userimg.png" alt="" id="img-src" accept="image/*">
+                                    }else{
+                                        <img class="img-style" src="@("data:image/jpg;base64,"+Model?.user_picture_base_64 ?? "")" />
+                                    } 
+                                </div>
+                                <div class="row form-start">
+
+                                    <div class="col-4">
+                                        <div class="col-12">
+                                            @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                id = "firstname",
+                                                group = formModel.group,
+                                                placeholder = "First Name",
+                                                attributes = "readonly",
+                                                value = (Model?.first_name ?? "")
+                                            })
+
+
+                                        </div>
+                                        <div class="col-12"> 
+                                            <div class="row-group">
+                                                @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "age",
+                                                    group = formModel.group,
+                                                    placeholder = "Age",
+                                                    container_style= "width:50%;",
+                                                    attributes = "disabled",
+                                                    
+                                                      
+                                                })
+                                @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "gender",
+                                                    group = formModel.group,
+                                                    placeholder = "Gender",
+                                                    attributes ="readonly",
+                                                    value = (Model?.gender ?? "")
+                                                        }) 
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="col-3">
+                                        @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "middlename",
+                                                    group = formModel.group,
+                                                    placeholder = "Middle Name",
+                                                    attributes = "readonly",
+                                                    value =(Model?.middle_name ?? "")
+                                                })  
+                                    
+                                    </div>
+
+                                    <div class="col-5">
+                                        <div class="row-group" style="padding-top:0px;">
+                                            @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "lastname",
+                                                    group = formModel.group,
+                                                    placeholder = "Last Name",
+                                                    container_style = "width: 100%;",
+                                                    attributes = "readonly",
+                                                    value = (Model?.last_name ?? "")
+                                                })  
+                                            @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "suffix",
+                                                    group = formModel.group,
+                                                    placeholder = "Suffix",
+                                                    container_style = "width: 100px;",
+                                                    attributes = "readonly",
+                                                    value = (Model?.suffix_name ?? "")
+                                                })  
+                                        </div>
+                                        
+                                    </div>  
+                                </div>
+                            </div>
+                            
+                            <div class="row info-div-2">
+                                <div class="col-12">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                        id = "completeAddress",
+                                                        group = formModel.group,
+                                                        placeholder = "Complete Address",
+                                                        attributes = "readonly",
+                                                        value = (Model?.complete_address ?? "")
+                                                    })
+                                </div> 
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "contact",
+                                                    group = formModel.group,
+                                                    placeholder = "Contact No",
+                                                    type = "number",
+                                                    attributes = "readonly",
+                                                    value = (Model?.mobile_number ?? "")
+                                                    
+                                                })
+                                </div>
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "dateOfBirth",
+                                                    group = formModel.group,
+                                                    placeholder = "Date of Birth",
+                                                    attributes = "readonly",
+                                                    value = (Model?.birth_date.ToShortDateString() ?? "")
+                                                })
+                                </div>  
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "email",
+                                                    group = formModel.group,
+                                                    placeholder = "Email Address",
+                                                    attributes = "readonly",
+                                                    value =  (Model?.Email ?? "")
+                                                })
+                                </div>
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "msessenger",
+                                                    group = formModel.group,
+                                                    placeholder = "Messenger Account",
+                                                    attributes = "readonly",
+                                                    value = (Model?.fb_messenger_account ?? "")
+                                                })
+                                </div> 
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                    id = "tin",
+                                                    group = formModel.group,
+                                                    placeholder = "TIN #",
+                                                    attributes = "readonly",
+                                                    value = (Model?.tin ?? "")
+                                                })
+                                </div> 
+                                <div class="col-12">
+                                    <div class="header" style="margin-top:24px; margin-bottom:16px;">
+                                        <h4 class="align-content-start">Sponsorship Registration Information</h4>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                id = "noOfAccount",
+                                                group = formModel.group,
+                                                placeholder = "No. of Account",
+                                                type = "number",
+                                                attributes = "readonly",
+                                                value = (Model?.accounts_count.ToString() ?? "")
+                                            })
+                                </div>
+                                <div class="col-4">
+
+                                  @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                            id = "directupLineCode",
+                                            group = formModel.group,
+                                            attributes = "readonly",
+                                            placeholder = "Direct Upline",
+                                            value = (Model?.upline_details?.ToString() ?? "")
+                                    })
+                                </div>
+                                @*<div class="col-4">
+                                    @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                                id = "placementCode",
+                                                group = formModel.group,
+                                                placeholder = "Palcement Code"
+                                            })
+                                </div>*@
+                                <div class="col-4">
+                                        @Html.Partial("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                                            id = "purchaseDate",
+                                            group = formModel.group,
+                                            placeholder = "Purchase Birth",
+                                            type = "date",
+                                            attributes = @$"max='{DateTime.Now.ToString("yyyy-MM-dd")}' readonly"
+                                        })
+                                </div>
+                                <div class="col-12 bg-light text-right">
+                                    <br/>
+                                    <a href="@("/Operations" + Url.Action("Index","Distributors"))" class="btn btn-secondary float-end" id="btn-back" style="width: 200px;">
+                                    <span class="material-symbols-sharp icon">
+                                    keyboard_backspace
+                                    </span> Back</a>
+                                    <br/>
+                                </div>  
+                            </div> 
+                @Html.AntiForgeryToken()
+                </form>
+            
+            </div>
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Take Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="camera-content">
+                            <video id="webcam" autoplay playsinline></video>
+                            <canvas id="canvas" class="d-none"></canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn-take">Take</button>
+                </div>
+                </div>
+            </div>
+        </div>
+<script>
+     $(document).ready(function () { 
+         authenticateOperationsPage(function (){});
+        BreadCrumbData([{
+            title : "Distributors",
+            url : "/Operations" + "@Url.Action("Index","Distributors")"
+        }, {
+            title: "Details",
+            url: "/Operations" + "@Url.Action("Index","Distributors")"
+        }])
+
+       $('#dateOfBirth').change(function () {
+            var dob = $('#dateOfBirth').val();
+
+            if (dob != null || dob != "") {
+            $('#age').val(getAge(dob));
+            }
+        });
+        function getAge(birth) {
+            ageMS = Date.parse(Date()) - Date.parse(birth);
+            age = new Date();
+            age.setTime(ageMS);
+            ageYear = age.getFullYear() - 1970;
+
+            return ageYear;
+        }
+    });
+
+    
+ 
+</script>

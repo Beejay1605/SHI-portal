@@ -1,0 +1,217 @@
+﻿@using Domain.Entity
+@using Domain.Models.Components;
+@using NuGet.Protocol
+@model Domain.DTO.Operations.Inventory.output.CreateInventoryOutputDto;
+@{
+    ViewData["Title"] = "Create Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/styles/operations/Inventory/Create.css" rel="stylesheet" type="text/css"/>  
+
+<div class="create-stocks-inventory">
+    <h2>Product Details</h2>
+    <hr/>
+    <div class="row">
+        <div class="col-8">
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "name",
+                       group = "",
+                       placeholder = "Product Name",
+                       value= Model.product_details.p_name ,
+                       attributes = "readonly"
+                   })
+            
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "inv-desc",
+                       group = "",
+                       placeholder = "Description",
+                       value= Model.product_details.p_mini_desc ,
+                       attributes = "readonly"
+                   })
+            
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "srp",
+                       group = "",
+                       placeholder = "SRP",
+                       value= Model.product_details.p_price.ToString() ,
+                       attributes = "readonly"
+                   })
+            
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "dprice",
+                       group = "",
+                       placeholder = "Distributor Price",
+                       value= Model.product_details.membership_price.ToString() ,
+                       attributes = "readonly"
+                   })
+        </div> 
+    </div>
+</div>
+
+
+<div class="create-stocks-inventory">
+    <form action="javascript:void(0);" id="form-inventory-create">
+        @Html.AntiForgeryToken();
+        <div class="row">
+            <div class="col-12">
+                <h2>Inventory Form</h2>
+                <hr/>
+            </div>
+            <div class="col-3">
+                @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel
+                       {
+                           id = "stocks",
+                           group = "",
+                           type = "number",
+                           placeholder = "Stocks to be added",
+                           value = "",
+                       })
+            </div>
+            <div class="col-12">
+                <div class="rich-text-box">
+                    <div class="centered">
+                        <div id="editor">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 buttons-sec">
+                <button class="btn btn-primary" id="btn-submit">Submit</button>
+                <button class="btn btn-outline-danger" id="btn-reset">Reset</button>
+            </div>
+        </div>
+    </form>
+    
+</div>
+
+<div class="product-inventory-history">
+    <h2>Inventory History</h2>
+    <hr/>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>QUANTITY</th>
+            <th>ACTION</th>
+            <th>STATUS</th>
+            <th>DOCUMENTATION</th>
+            <th>TRANSACTION ID</th>
+            <th>DATE CREATED</th>
+            <th>CREATED BY</th>
+        </tr>
+        </thead>
+        <tbody>
+            @if (Model.inventory.Count() > 0)
+            {
+                foreach (var inv in Model.inventory)
+                {
+                    <tr>
+                        <td>@inv.ident</td>
+                        <td>@inv.quantity_stock</td>
+                        <td>@inv.actions</td>
+                        <td>@(inv.status ? "VOIDED" : "NO")</td>
+                        <td>--</td>
+                        <td>@inv.transaction_ident</td>
+                        <td>@inv.created_dt.ToString("MMMM dd, yyyy HH:mm tt")</td>
+                        <td>--</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+ 
+<script>
+
+    let descEditor;
+    ClassicEditor
+    .create( document.querySelector( '#editor' ), {
+        // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+    } )
+    .then( editor => {
+        descEditor = editor;
+    } )
+    .catch( err => {
+        console.error( err.stack );
+    } );
+    
+    $(document).ready(() => {
+        authenticateOperationsPage(() => {});
+        BreadCrumbData([{
+            title: "Inventory",
+            url: "/Operations" + "@Url.Action("Index", "Inventory")"
+        }, {
+            title: "Create",
+            url: "/Operations" + "@Url.Action("Create", "Inventory")"
+        }]);
+    });
+
+    $("#btn-reset").click(function () {
+        window.location.reload(); 
+    });
+
+    $("#btn-submit").on('click', function () {
+        showDialogBoxMultiButtons({
+            title: "Add Inventory Stock",
+            body: `Are you sure you want to add inventory stocks?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="createInventoryExecute()">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+
+    function clearErrors() {
+        $('input[group="create-product-Inventory"]').removeClass("is-invalid");
+        $('select[group="create-product-Inventory"]').removeClass("is-invalid");
+        $(`span[group="create-product-Inventory"]`).text("");
+    }
+
+    function createInventoryExecute() {
+        closeDialogBoxMultiButtons();
+        var form = $('#form-inventory-create');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData();
+        form_Data.append("__RequestVerificationToken", token);
+        form_Data.append("quantity", $("#stocks").val());
+         form_Data.append("doc_body", descEditor.getData());
+        form_Data.append("product_id", "@Model.product_details.ident"); 
+
+        clearErrors();
+        $.ajax({
+            url: "/Operations" + "@Url.Action("CreateAction", "Inventory")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                showDialog(() => {
+                    window.location.reload();
+                }, "SUCCESS", "Add product", "Successfully Added new inventory stocks");
+                resetForms();
+            },
+            error: function (response) {
+                SHILoadingStop();
+                const { responseJSON, status, responseText } = response;
+                if (status === 400) {
+                    console.log(response);
+                    showDialog(() => {
+                        
+                    }, "DANGER", "Validation", responseText);
+                }else if (status === 401){
+                      refreshToken(() => {
+                          createInventoryExecute();
+                      });
+                 }else{
+                      SHILoadingStop();
+                 }
+            }
+        });
+    }
+</script>

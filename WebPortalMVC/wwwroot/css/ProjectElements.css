@@ -1,0 +1,33 @@
+button.btn-primary, a.btn-primary {
+  background: #1A936F;
+  border-radius: 5px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: #FFFFFF;
+}
+a.btn {
+  display: flex;
+  height: 40px !important;
+  vertical-align: middle;
+}
+a.btn span {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 8px;
+}
+
+button.btn-primary:hover, a.btn-primary:hover {
+  background: #167d5f;
+}
+
+button.btn-primary:active, a.btn-primary:active {
+  background: #12684e !important;
+}
+
+.container-fluid {
+  margin: 0px !important;
+  padding: 0px !important;
+}/*# sourceMappingURL=ProjectElements.css.map */

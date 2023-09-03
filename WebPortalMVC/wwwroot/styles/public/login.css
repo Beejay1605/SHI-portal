@@ -1,0 +1,43 @@
+.login-page {
+  width: 100%;
+  height: auto;
+  display: flex;
+}
+.login-page .cover-section {
+  width: calc(100vw - 440px);
+  background-position: center;
+  background-size: cover;
+}
+.login-page .cover-section img {
+  width: 300px;
+  height: 300px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -o-object-position: center;
+     object-position: center;
+}
+.login-page .login-form {
+  width: 440px;
+  height: 100vh;
+  padding: 32px;
+  text-align: center;
+  display: flex;
+}
+.login-page .login-form .form-wrapper {
+  width: 100%;
+  margin: auto;
+}
+.login-page .login-form .form-wrapper img {
+  height: 180px;
+  text-align: center;
+}
+.login-page .login-form .form-wrapper button {
+  width: 100%;
+}
+.login-page .login-form .form-wrapper a {
+  float: left;
+  margin-bottom: 6px;
+}
+.login-page .login-form .form-wrapper .floating-input {
+  margin-bottom: 8px;
+}/*# sourceMappingURL=login.css.map */

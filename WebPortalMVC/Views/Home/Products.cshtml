@@ -1,0 +1,476 @@
+﻿@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Products Page";
+    Layout = null;
+
+}
+
+<link href="~/styles/public/onlineshop.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
+<div class="Main">
+
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <a asp-action="Index"><div class=""><img src="~/assets/logo/onlinestorelogo.svg" class="MainLogo"></div></a>
+        </div>
+
+        <div class="top-bar__right">
+            <div class="search me-2">
+                <input type="text" placeholder="Search..." class="searchinput">
+                <button class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+            <div class="account"><i class="fa fa-user" aria-hidden="true"></i> Account</div>
+            <div class="shopping"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</div>
+
+            <div class="hamburger">
+                <i class="fa fa-bars burger" ></i>
+            </div>
+
+        </div>
+    </header>
+    <div class="menu">
+        <span class="close-button">&times;</span>
+        <nav class="mobile-nav">
+            <ul>
+                <li onclick="location.href='@Url.Action("Index", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Products</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-archive" aria-hidden="true"></i> Packages</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Shopping</a></li>
+                <li onclick="location.href='@Url.Action("Products", "Home")'"><a href="#" class="text-decoration-none"><i class="fa fa-user" aria-hidden="true"></i> User</a></li>
+            </ul>
+        </nav>
+    </div>
+   
+
+    <div class="ProductList-subheader w-100">
+        <ul class="category-list">
+            <li class="category-item active" onclick="location.href='@Url.Action("Products", "Home")'">All products</li>
+            <li class="category-item">Category 1</li>
+            <li class="category-item">Category 2</li>
+            <li class="category-item">Category 3</li>
+        </ul>
+    </div>
+    <div class="products">
+        <div class="row d-flex align-items-center ">
+            <div class="col">
+                <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+                   <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+                   <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/Karolina.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/brown.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class="card-text float-end">$236.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/white.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$155.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $364.00</span>
+                    </div>
+                    <div class="col px-0 prodict-divs">
+                        <div class="image-container position-relative">
+                            <img src="~/assets/img/dog.png" class="card-img-top mb-2 product-img" alt="...">
+                            <a asp-action="PackageDetails">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <span class="overlay-text"><i class="fa fa-eye"></i> View</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <span class="card-text">Product Name</span>
+                        <br />
+                        <span class="card-text" style="color:#999999;">Category</span>
+                        <span class=" card-text float-end " style="color:#FF6F61;">$198.00</span> <span class="card-text-off float-end text-decoration-line-through me-2" style="color:#999999 ;"> $220.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var hamburger = document.querySelector('.hamburger');
+        var menu = document.querySelector('.menu');
+        var closeButton = document.querySelector('.close-button');
+
+        hamburger.addEventListener('click', function () {
+            menu.classList.add('active');
+        });
+
+        closeButton.addEventListener('click', function () {
+            menu.classList.remove('active');
+        });
+    });
+</script>

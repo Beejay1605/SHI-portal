@@ -1,0 +1,138 @@
+﻿
+<link rel="stylesheet" href="~/css/components/ConfirmDialog.css" />
+
+<div class="dialog-container" id="dialog-container" style="display: none;">
+    <div class="bg-dark"></div>
+    <div class="dialog-multi-buttons" id="dialog-multi-buttons" style="display: none;">
+        <div class="dialog-header">
+            <h3 id="title"></h3>
+            <a href="#" onclick="closeDialogBoxMultiButtons()"><i class="fa fa-times"></i></a>
+        </div>
+        <hr />
+        <div class="dialog-body">
+            <p id="msg-body"></p>
+        </div>
+        <div class="dialog-footer" id="dialog-footer">
+            <button class="btn btn-secondary">No</button>
+            <button class="btn btn-primary">Yes</button>
+        </div>
+    </div>
+    <div class="dialog-ok" id="dialog-ok" style="display: none;">
+        <div class="icon">
+            <i class="fa fa-check"></i>
+        </div>
+        <h4 id="ok-title"></h4>
+        <p id="ok-body"></p>
+        <button id="ok-btn" class="btn btn-primary">OK</button>
+    </div>
+</div>
+
+<script>
+    let dialogBoxYesNo = {
+        title: "",
+        body: "",
+        buttons: [],
+        visibility: false
+    }
+
+    $(document).ready(function () {
+    @*
+            showDialogBoxMultiButtons({
+            title : "Save Change?",
+            body : `Are you sure you want to publish your profile?
+            <br/>
+            Important Reminder: Any changes made on your profile
+            will be reviewed and approved by the Administrator.`,
+            buttons : [
+            `<button class="cf-button cf-secondary" onclick="closeDialogBoxMultiButtons()">Cancel</button>`,
+            `<button class="cf-button cf-primary" onclick="alert('awdawdaw')">Ok</button>`
+            ],
+            visibility : true
+            });
+
+            showDialogOk({
+            title : "DDNG",
+            body : "Your profile will be subject for review and approval. Please expect response through your registered email within 48 hours.",
+            type : "WARNING", //DANGER, SUCCESS, WARNING
+            visibility : true,
+            callBack : sample // pass a function for call back
+            });
+            *@
+        });
+
+    function showDialogBoxMultiButtons(paramDialogBoxYesNo) {
+        if (paramDialogBoxYesNo?.visibility) {
+            $("#dialog-multi-buttons").show();
+            $("#dialog-container").show();
+        } else {
+            $("#dialog-multi-buttons").hide();
+            $("#dialog-container").hide();
+        }
+
+        $("#dialog-multi-buttons #title").html(paramDialogBoxYesNo?.title);
+        $("#dialog-multi-buttons #msg-body").html(paramDialogBoxYesNo?.body);
+        $("#dialog-multi-buttons #dialog-footer").html("");
+        paramDialogBoxYesNo?.buttons?.forEach(function (obj) {
+            $("#dialog-multi-buttons #dialog-footer").append(obj);
+        });
+    }
+
+    function closeDialogBoxMultiButtons() {
+        $("#dialog-multi-buttons").hide();
+        $("#dialog-container").hide();
+        $("#dialog-multi-buttons #title").text(dialogBoxYesNo?.title);
+        $("#dialog-multi-buttons #msg-body").text(dialogBoxYesNo?.body);
+        $("#dialog-multi-buttons #dialog-footer").html("");
+    }
+
+    let dialogBoxOk = {
+        title: "",
+        body: "",
+        type: "", //DANGER, SUCCESS, WARNING
+        visibility: false
+    }
+
+    function showDialogOk(param_obj) {
+
+        $("#dialog-ok #ok-title").html(param_obj?.title);
+        $("#dialog-ok #ok-body").html(param_obj?.body);
+        $("#dialog-ok #ok-btn").attr("onclick", `okDialogBoxClose(${param_obj?.callBack})`);
+
+        if (param_obj?.type === "DANGER") {
+            $("#dialog-ok .icon").attr("style", "background-color: #f14668;");
+            $("#dialog-ok .icon i").attr("class", "fa fa-times");
+            $("#dialog-ok #ok-btn").attr("class", "cf-button cf-danger");
+        } else if (param_obj?.type === "SUCCESS") {
+            $("#dialog-ok .icon").attr("style", "background-color: #25BE75;");
+            $("#dialog-ok .icon i").attr("class", "fa fa-check");
+            $("#dialog-ok #ok-btn").attr("class", "cf-button cf-primary");
+        } else if (param_obj?.type === "WARNING") {
+            $("#dialog-ok .icon").attr("style", "background-color: #ffe08a;");
+            $("#dialog-ok .icon i").attr("class", "fa fa-exclamation");
+            $("#dialog-ok .icon i").attr("style", "color: #2e2e2e;");
+            $("#dialog-ok #ok-btn").attr("class", "cf-button cf-warning");
+            $("#dialog-ok #ok-btn").attr("style", "color: #2e2e2e;");
+        } else {
+            okDialogBoxClose();
+        }
+
+
+        if (param_obj?.visibility) {
+            $("#dialog-ok").show();
+            $("#dialog-container").show();
+        } else {
+            $("#dialog-ok").hide();
+            $("#dialog-container").hide();
+        }
+    }
+
+    function okDialogBoxClose(callback = () => { }) {
+        callback();
+        $("#dialog-ok #ok-title").html("");
+        $("#dialog-ok #ok-body").html("");
+        $("#dialog-ok #ok-btn").attr("onclick", "");
+        $("#dialog-ok").hide();
+        $("#dialog-container").hide();
+    }
+
+</script>

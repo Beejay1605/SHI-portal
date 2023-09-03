@@ -1,0 +1,43 @@
+$primaryColor : #1A936F;
+
+button.btn-primary, a.btn-primary{ 
+    background: $primaryColor;
+    border-radius: 5px;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;  
+    letter-spacing: 0.02em; 
+    color: #FFFFFF;
+
+    span{
+
+    }
+}
+a.btn{ 
+    display: flex;
+    height: 40px !important;
+    vertical-align: middle;
+
+    span{
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 8px;
+    }
+}
+
+button.btn-primary:hover, a.btn-primary:hover{ 
+    background: darken($primaryColor, 5%);
+}
+
+button.btn-primary:active, a.btn-primary:active{ 
+    background: darken($primaryColor, 10%) !important;
+}
+
+
+
+.container-fluid{
+    margin: 0px !important;
+    padding: 0px !important;
+}

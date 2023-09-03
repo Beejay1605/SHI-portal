@@ -1,0 +1,50 @@
+
+
+.team-encode-page{
+  width: 100%;
+
+
+  .dist-details{ 
+    padding: 24px; 
+    padding-bottom: 48px;
+    background-color: #ffffff; 
+    padding-top: 48px;
+    box-shadow: -9px 8px 17px -5px rgba(110,110,110,0.75);
+    -webkit-box-shadow: -9px 8px 17px -5px rgba(110,110,110,0.75);
+    -moz-box-shadow: -9px 8px 17px -5px rgba(110,110,110,0.75);
+    margin-left: 24px;
+    
+    img{
+      width: 100%;
+      height: auto;
+      object-fit: contain; 
+      object-position: center; 
+      
+      
+    }
+    
+    .total-accounts{
+        display: flex;
+      border: 1px solid #1A936F;
+      border-top: 12px solid #1A936F;
+      max-height: 280px !important;
+
+      .cont{
+        min-width: 140px;
+        margin: auto;
+        text-align: center;
+        
+        h1{
+          font-size: 92px !important;
+          color: #1A936F !important;
+        }
+        p{
+          font-size: 24px !important;
+        }
+        
+      }
+    }
+    
+  }
+
+}

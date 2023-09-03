@@ -1,0 +1,50 @@
+﻿
+
+
+.payin-code-page{
+    width: 100%;
+    height: auto;
+
+
+    .action-row{
+        padding-bottom: 16px;
+        width: 100%;
+        display: flex;
+
+        button,a{
+            height: 44px;
+            display: flex;
+            margin-left: auto;
+
+            span{
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+        }
+    }
+
+
+    table{
+        width: 100%;
+
+        tr{
+
+            td{
+
+                a{
+                    display: flex;
+                    text-decoration: none;
+                    margin-right: 12px;
+                    
+                    span{
+                        margin-right: 4px;
+                    }
+                }
+            }
+
+            td:last-child{
+                display: flex;
+            }
+        }
+    }
+}

@@ -1,0 +1,156 @@
+.POS-main {
+  width: 100%;
+  height: auto;
+}
+.POS-main .main-header {
+  display: flex;
+  width: 100%;
+}
+.POS-main .main-header .row-main {
+  display: flex;
+}
+.POS-main .main-header .input-group {
+  width: calc(100% - 260px);
+}
+.POS-main .main-header .input-group button {
+  width: 170px;
+  margin-left: 8px !important;
+  max-height: 40px;
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+.POS-main .main-header .input-group .floating-input {
+  margin-top: auto;
+}
+.POS-main .main-header .user-profile {
+  min-width: 260px !important;
+  max-width: 260px !important;
+  display: flex;
+  border: 1px solid #1A936F;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.POS-main .main-header .user-profile img {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 50%;
+  border: 1px solid #f1f1f1;
+}
+.POS-main .main-header .user-profile .info {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: auto;
+}
+.POS-main .main-header .user-profile .info p {
+  margin: 0px;
+  font-weight: 500;
+  color: #f1f1f1;
+}
+.POS-main .main-header .user-profile .info small {
+  margin-top: -8px;
+  color: #f1f1f1;
+}
+.POS-main .main-header .user-profile span {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 12px;
+  cursor: pointer;
+  color: #f1f1f1;
+}
+.POS-main .main-header .user-profile span:hover {
+  background-color: #1e1e1e !important;
+  font-weight: 600 !important;
+}
+.POS-main .main-header .user-profile:hover {
+  background-color: #3e3e3e !important;
+}
+.POS-main #product-list-container {
+  font-family: Montserrat !important;
+}
+.POS-main #product-list-container .card {
+  border-radius: 0px;
+  border: none;
+  background-color: #FAFAFA;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.POS-main #product-list-container .card .card-img-top {
+  object-fit: cover;
+  object-position: center;
+  -o-object-fit: cover;
+  border-radius: 0px;
+  max-height: 200px !important;
+  min-height: 200px !important;
+  width: 100% !important;
+}
+.POS-main #product-list-container .card .card-body {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.POS-main #product-list-container .card .card-body .card-title {
+  width: 100% !important;
+  height: 44px !important;
+  font-family: Asap;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: -0.03em;
+  color: #2E2E2E;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+  margin-top: 8px;
+}
+.POS-main #product-list-container .card .card-body .card-text {
+  color: #1A936F;
+}
+.POS-main #product-list-container .card .card-body .pricing .old-price {
+  text-decoration-line: line-through;
+}
+.POS-main #product-list-container .card .card-body .badge {
+  margin-bottom: 4px;
+}
+.POS-main #product-carts {
+  min-height: calc(100vh - 680px);
+}
+.POS-main #product-carts .card {
+  position: relative;
+  max-height: 70px;
+}
+.POS-main #product-carts .card .card-title {
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  height: 24px;
+  margin-bottom: 0px;
+}
+.POS-main #product-carts button {
+  width: 24px !important;
+  height: 24px !important;
+  display: flex;
+  top: -4px;
+  right: -4px;
+  position: absolute;
+  padding: 2px !important;
+}
+.POS-main #product-carts button span {
+  font-size: 16px !important;
+  margin: auto;
+}
+
+/*# sourceMappingURL=Index.css.map */

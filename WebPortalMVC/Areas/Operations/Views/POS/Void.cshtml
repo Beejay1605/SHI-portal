@@ -1,0 +1,178 @@
+﻿@model Domain.DTO.Operations.POS.Output.VoidOutputDto
+@using Domain.Models.Components;
+@{
+    ViewData["Title"] = "Point Of Sale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="void-page">
+    <div class="row">
+        <div class="col-4">
+            @await Html.PartialAsync("~/Views/Shared/components/InputComponent.cshtml", new InputComponentModel{
+                       id = "input-search",
+                       group = "",
+                       placeholder = "Search",
+                       value= ViewBag.ID
+                   }) 
+            @if(ViewBag.MESSAGE != "" && !string.IsNullOrEmpty(ViewBag.ID)){
+                <span class="text-danger">@ViewBag.MESSAGE</span>
+            }
+        </div>
+        <div class="col-8">
+            <button class="btn btn-dark" id="btn-search" style="margin-top: 20px;">Search</button>
+        </div>
+        @if (ViewBag.MESSAGE == "")
+        {
+            <div class="col-6">
+                @if (Model.distributors_details != null)
+                {
+                    <br/>
+                    <h3>Distributor</h3>
+                    <hr/>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                        <tr>
+                            <td>Full Name</td>
+                            <td>@Model.distributors_details.first_name @Model.distributors_details.last_name</td>
+                        </tr>
+                        <tr>
+                            <td>Birthdate</td>
+                            <td>@Model.distributors_details.birth_date.ToString("MMMM dd, yyyy")</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.distributors_details.complete_address</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                }
+            </div>
+            <div class="col-12">
+                <br/>
+                <h3>Product Purchased</h3>
+                <hr/>
+                <table style="border-collapse: collapse;width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">Quantity</th>
+                            <th style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">PRODUCT</th>
+                            <th style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">SRP</th>
+                            <th style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">DISC. Price</th>
+                            <th style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal totalAmount = 0;
+                        }
+                        @foreach (var pos in Model.pos_tran)
+                        {
+                            totalAmount += (pos.unit_price * pos.quantity);
+                            <tr>
+                                <td style="border: 1px solid #ddd;padding: 8px;">@pos.quantity</td>
+                                <td style="border: 1px solid #ddd;padding: 8px;">@pos.product_details.p_name</td>
+                                <td style="border: 1px solid #ddd;padding: 8px;">₱ @pos.srp_price.ToString("N2")</td>
+                                <td style="border: 1px solid #ddd;padding: 8px;">₱ @pos.unit_price.ToString("N2")</td>
+                                <td style="border: 1px solid #ddd;padding: 8px;font-weight: 600;">₱ @((pos.unit_price * pos.quantity).ToString("N2"))</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="border: 1px solid #ddd;padding: 8px;font-weight: 600;background-color: #CECECE;">TOTAL</td>
+                            <td style="border: 1px solid #ddd;padding: 8px;font-weight: 600;background-color: #CECECE;">₱ @totalAmount.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-danger" id="btn-void-tran">Void Transaction</button>
+            </div>
+        }
+        
+        <form action="javascript:void(0);" id="form-purchase-product">
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => { 
+        BreadCrumbData([{
+            title : "Point of Sale",
+            url : "/Operations" + "@Url.Action("Index","POS")"
+        }, {
+            title: "Transaction",
+            url: "/Operations" + "@Url.Action("Index","POS")"
+        }, {
+             title: "Void",
+             url: "/Operations" + "@Url.Action("Void","POS")"
+         }]);
+        authenticateOperationsPage(() => {
+
+        });
+    })
+    
+    $("#btn-search").on('click', function (){
+       window.location.href = "/Operations" + "@Url.Action("Void","POS")?id="  + $("#input-search").val();
+    });
+    
+    $("#btn-void-tran").on('click', function (){
+        showDialogBoxMultiButtons({
+            title: "Void Transaction",
+            body: `Are you sure you want to void this transaction?`,
+            buttons: [
+                `<button class="btn btn-secondary" onclick="closeDialogBoxMultiButtons()">No</button>`,
+                `<button class="btn btn-primary" onclick="VoidTransactionExecute()">Yes</button>`
+            ],
+            visibility: true
+        });
+    });
+    
+    function VoidTransactionExecute(){
+        closeDialogBoxMultiButtons();
+        var form = $('#form-purchase-product');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var form_Data = new FormData(); 
+        form_Data.append("__RequestVerificationToken", token); 
+        form_Data.append("id", "@ViewBag.ID"); 
+        
+        SHILoadingStart();
+                
+        $.ajax({
+            url: "/Operations" + "@Url.Action("VoidTransactionAction","POS")",
+            type: "POST",
+            data: form_Data,
+            contentType: false,
+            processData: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+            },
+            success: function (response) {
+                SHILoadingStop();
+                showDialog(() => {
+                    window.location.href = "/Operations"+"@Url.Action("Index","POS")";
+                }, "SUCCESS", "Create Product", "Successfully Void this Transaction");
+            },
+            error: function (response) { 
+                const { responseJSON, status, responseText } = response; 
+                console.log(response);
+                if (status === 400) {
+                    showDialog(() => {
+                                            
+                    }, "DANGER", "Inventory Validation", responseText);
+                     SHILoadingStop();
+                }else if (status === 401){
+                     refreshToken(() => {
+                         VoidTransactionExecute();
+                     });
+                }else{
+                     SHILoadingStop();
+                }
+            }
+        });
+        
+    }
+    
+</script>

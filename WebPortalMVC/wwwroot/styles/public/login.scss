@@ -1,0 +1,52 @@
+
+
+
+.login-page{
+    width: 100%;
+    height: auto;
+    display: flex;
+
+    $loginWidth: 440px;
+    .cover-section{
+        width: calc(100vw - $loginWidth);
+        background-position: center;
+        background-size: cover;
+
+        img{
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            object-position: center;
+        }
+    }
+
+    .login-form{
+        width: $loginWidth;
+        height: 100vh;
+        padding: 32px;
+        text-align: center;
+        display: flex;
+
+        .form-wrapper{
+            width: 100%;
+            margin: auto;
+
+            img{ 
+                height: 180px;
+                text-align: center;
+            }
+
+            button{ 
+                width: 100%;
+            }
+
+            a{
+                float: left;
+                margin-bottom: 6px;
+            }
+            .floating-input{
+                margin-bottom: 8px;
+            }
+        }
+    }
+}
